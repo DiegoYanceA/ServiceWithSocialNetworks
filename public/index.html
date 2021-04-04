@@ -2,10 +2,60 @@
 <html>
 
 <head>
-    <title>Express Diego</title>
+    <title>Express</title>
 </head>
 
 <body>
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script>
+    $.getJSON('http://api.wipmania.com/jsonp?callback=?', function (data) {
+        alert('País: ' + data.address.country);
+    });
+    </script>
+    <script>
+        /**
+         * Sample JavaScript code for youtube.liveBroadcasts.list
+         * See instructions for running APIs Explorer code samples locally:
+         * https://developers.google.com/explorer-help/guides/code_samples#javascript
+         */
+
+        function authenticate() {
+            return gapi.auth2.getAuthInstance()
+                .signIn({ scope: "https://www.googleapis.com/auth/youtube.readonly" })
+                .then(function () { console.log("Sign-in successful"); },
+                    function (err) { console.error("Error signing in", err); });
+        }
+        function loadClient() {
+            gapi.client.setApiKey("AIzaSyDqPr5eNbQGWRFlxXIO8TJWFvAxpp19Myk");
+            return gapi.client.load("https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest")
+                .then(function () { console.log("GAPI client loaded for API"); },
+                    function (err) { console.error("Error loading GAPI client for API", err); });
+        }
+        // Make sure the client is loaded and sign-in is complete before calling this method.
+        function execute() {
+            console.log(gapi.client)
+            return gapi.client.youtube.liveBroadcasts.list({
+                "part": [
+                    "snippet"
+                ],
+                "id": [
+                    "MmMMivEGb0o"
+                ]
+            })
+                .then(function (response) {
+                    // Handle the results here (response.result has the parsed body).
+                    console.log("Response", response);
+                },
+                    function (err) { console.error("Execute error", err); });
+        }
+        gapi.load("client:auth2", function () {
+            gapi.auth2.init({ client_id: "1076409570713-ap0mafanbhf8fq7pgj3rgseso2kehqiu.apps.googleusercontent.com" });
+            console.log(gapi)
+        });
+    </script>
+    <button onclick="authenticate().then(loadClient)">authorize and load</button>
+    <button onclick="execute()">execute</button>
     <h1>Express</h1>
     <p>Welcome to Express</p>
 </body>
