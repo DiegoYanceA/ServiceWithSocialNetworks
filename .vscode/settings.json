@@ -9,4 +9,5 @@
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": true
     },
+    "appService.defaultWebAppToDeploy": "/subscriptions/cbfa858d-514e-4280-b66f-36b0c3ef3190/resourceGroups/AppServiceTutorial-rg/providers/Microsoft.Web/sites/asdiegoya",
 }
