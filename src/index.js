@@ -1,4 +1,5 @@
 const server = require('./server');
+require("./database")
 
 const port = process.env.PORT || 3000;
 
