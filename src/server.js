@@ -20,7 +20,7 @@ const create = async () => {
 
     // root route - serve static file
     app.get('/', (req, res) => {
-        res.sendFile(path.join(__dirname, '../public/client.html'));
+        res.sendFile(path.join(__dirname, '../public/index.html'));
     });
 
     // Error handler
