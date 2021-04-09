@@ -26,7 +26,7 @@ const create = async () => {
     app.use(express.json());
     app.use(express.urlencoded({extended: true}))
     
-    // app.use(express.static(__dirname + '/../public/'));
+    app.use(express.static(__dirname + '/../public/'));
 
     if(mode == "PRODUCTION"){
         app.use(history());
