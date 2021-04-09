@@ -12,7 +12,10 @@ module.exports = function () {
     router.post('/signup', authController.signup);
     router.get('/me', verifyToken, authController.me);
     router.get('/privacy', policyController.policy);
-    router.get('/channel', youtubeController.channel);
+
+    //Youtube
+    router.get('/channels/any', youtubeController.anyChannel);
+    router.get('/channels/mods', youtubeController.modChannels);
 
     return router;
 }
