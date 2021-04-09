@@ -1,6 +1,8 @@
 const express = require('express');
 const path = require('path');
 const router = require('./routes/index.js');
+const history = require('connect-history-api-fallback');
+const cors = require('cors');
 
 // ignore request for FavIcon. so there is no error in browser
 const ignoreFavicon = (req, res, next) => {
@@ -18,17 +20,24 @@ const create = async () => {
 
     // configure nonFeature
     app.use(ignoreFavicon);
-
+    
     //json
     app.use(express.json());
-    app.use(express.urlencoded({extended: false}))
+    app.use(express.urlencoded({extended: true}))
+    
+    app.use(express.static(__dirname + '/../public/'));
 
+    app.use(history());
+    
+    app.use(cors());
     // root route - serve static file
-    app.get('/', (req, res) => {
-        res.sendFile(path.join(__dirname, '../public/index.html'));
-    });
+    // app.get('/', (req, res) => {
+    //     // res.send('<h2>Bienvenido: Ingresaste al Servidor</h2>');
 
-    app.use('/', router());
+    //     // res.render('index.html');
+    // });
+
+    // app.use('/', router());
 
     // Error handler
     /* eslint-disable no-unused-vars */
