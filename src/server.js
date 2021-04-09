@@ -28,7 +28,7 @@ const create = async () => {
     
     // app.use(express.static(__dirname + '/../public/'));
 
-    if(mode != "DEVELOPMENT"){
+    if(mode == "PRODUCTION"){
         app.use(history());
     }
     
@@ -39,7 +39,7 @@ const create = async () => {
     app.get('/', (req, res) => {
         // res.send('<h2>Bienvenido: Ingresaste al Servidor</h2>');
 
-        // res.render('index.html');
+        res.render('index.html');
     });
 
     app.use('/', router());
