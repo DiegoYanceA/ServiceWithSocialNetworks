@@ -5,6 +5,7 @@ const verifyToken = require("../controllers/verifyToken")
 const authController = require('../controllers/authController');
 const policyController = require('../controllers/policyController');
 const streamerController = require('../controllers/streamerController');
+const serverController = require('../controllers/serverController');
 
 module.exports = function () {
 
@@ -19,6 +20,10 @@ module.exports = function () {
     router.get('/channels/myChannels', streamerController.myChannels);
     router.get('/channels/mySubscribers', streamerController.mySubscribers);
     router.post('/channels/myTokenYoutube', streamerController.myTokenYoutube);
+
+    //Server
+    router.get('/servers/serverMinecraft/:ip', serverController.anyServerMinecraft);
+    router.get('/servers/myServerMCRange', serverController.myServerMCRange);
 
     return router;
 }
