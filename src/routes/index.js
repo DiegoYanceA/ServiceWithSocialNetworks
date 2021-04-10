@@ -14,7 +14,7 @@ module.exports = function () {
     router.get('/privacy', policyController.policy);
 
     //Youtube
-    router.get('/channels/any', youtubeController.anyChannel);
+    router.get('/channels/any/:idChannel', youtubeController.anyChannel);
     router.get('/channels/mods', youtubeController.modChannels);
 
     return router;

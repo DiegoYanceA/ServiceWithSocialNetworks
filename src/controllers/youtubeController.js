@@ -26,7 +26,7 @@ getUrlYoutube = (idChannel) => {
 }
 
 exports.anyChannel =  async (req, res, next) => {
-    var { idChannel } = req.body;
+    var { idChannel } = req.params;
     if(!idChannel){
         return res.json({
             msg: "El sistema no ha recibido la ID del canal."
@@ -35,7 +35,7 @@ exports.anyChannel =  async (req, res, next) => {
 
     var url = getUrlYoutube(idChannel);
 
-    var channel = findChannel(url);
+    var channel = await findChannel(url);
 
     return res.json({
         channel: channel

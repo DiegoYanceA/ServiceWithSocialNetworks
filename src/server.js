@@ -26,14 +26,11 @@ const create = async () => {
     app.use(express.json());
     app.use(express.urlencoded({extended: true}))
     
-    
-
     if(mode == "PRODUCTION"){
         app.use(express.static(__dirname + '/../public/'));
         app.use(history());
     }
-    
-    
+
     app.use(cors());
 
     // root route - serve static file
