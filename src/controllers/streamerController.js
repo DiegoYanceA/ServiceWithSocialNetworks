@@ -27,7 +27,7 @@ findTwitchChannel = async (name) => {
     var url = "https://api.twitch.tv/kraken/channel?channel_read=" + name;
     var response = await axios.get(url, {
         headers: {
-            'Client-ID' : '3375bfutpo46g5nqrlvqzeibzf8aar',
+            'Client-ID' : 'zgmzwspqg698alw31rhuhee2u2wzaj',
             'Authorization' : 'OAuth ' + tokenTwitch,
             'Accept': 'application/vnd.twitchtv.v5+json'
         },
