@@ -17,6 +17,8 @@ module.exports = function () {
     router.get('/channels/anyYoutube/:idChannel', streamerController.anyYoutubeChannel);
     router.get('/channels/modYoutube', streamerController.modYoutubeChannels);
     router.get('/channels/myChannels', streamerController.myChannels);
+    router.get('/channels/mySubscribers', streamerController.mySubscribers);
+    router.post('/channels/myTokenYoutube', streamerController.myTokenYoutube);
 
     return router;
 }

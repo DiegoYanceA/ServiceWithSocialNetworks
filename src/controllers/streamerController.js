@@ -81,7 +81,7 @@ exports.modYoutubeChannels = async (req, res) => {
     });
 }
 
-exports.myChannels = async (req, res, nexxt) => {
+exports.myChannels = async (req, res, next) => {
     
     var channelYoutube = await findYoutubeChannel(getUrlYoutube(myYoutubeChannel));
     var channelTwitch = await findTwitchChannel(myNameTwitch)
@@ -105,3 +105,38 @@ exports.myChannels = async (req, res, nexxt) => {
         myChannel: myChannel
     });
 }
+
+
+exports.mySubscribers = async (req, res, next) => {
+    // var url = "https://youtube.googleapis.com/youtube/v3/subscriptions?part=snippet%2CcontentDetails&maxResults=1000&mySubscribers=true&key="+API_KEY
+    // var token = "4/0AY0e-g6Ab3O8wgBLS69zfpD2rgGKklXgcMfMZfk6g5kmFO1At46KWXmdI-28fsoTp7VN3g"
+    var url = "";
+    var token = "4/0AY0e-g6Ab3O8wgBLS69zfpD2rgGKklXgcMfMZfk6g5kmFO1At46KWXmdI-28fsoTp7VN3g"
+    var response = await axios.get(url, {
+        headers: {
+            Authorization: 'Bearer ' + token,
+            Accept: 'application/json'
+        }
+    });
+    console.log(response)
+    return res.json({
+        mySubscribers: response.data
+    });
+}
+
+exports.myTokenYoutube = async (req, res, next) => {
+    console.log("Gaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+    var url ="http://accounts.google.com/o/oauth2/token?code=4/0AY0e-g7z6COxjiyQyycOMcqkdFjKoxyuosiVo3TvaAV6098wvmoEHcYZhNkuB1Ty9NeT5g&client_id=1076409570713-viv5fhmig3vfjh0t11tkmuilsf0qtu0l.apps.googleusercontent.com&client_secret=OMZfsyvvQaBr5kHtryRUz31P&redirect_uri=http://localhost:3000/oauth2callback&grant_type=authorization_code"
+    
+    var response = await axios.get(url, {
+        headers: {
+            "Content-Type": 'application/x-www-form-urlencoded',
+            "Host": "http://accounts.google.com"
+        }
+    });
+    console.log(response)
+    return res.json({
+        mySubscribers: response.data
+    });
+}
+
