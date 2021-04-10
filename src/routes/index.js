@@ -4,7 +4,7 @@ const verifyToken = require("../controllers/verifyToken")
 
 const authController = require('../controllers/authController');
 const policyController = require('../controllers/policyController');
-const youtubeController = require('../controllers/youtubeController');
+const streamerController = require('../controllers/streamerController');
 
 module.exports = function () {
 
@@ -14,8 +14,9 @@ module.exports = function () {
     router.get('/privacy', policyController.policy);
 
     //Youtube
-    router.get('/channels/any/:idChannel', youtubeController.anyChannel);
-    router.get('/channels/mods', youtubeController.modChannels);
+    router.get('/channels/anyYoutube/:idChannel', streamerController.anyYoutubeChannel);
+    router.get('/channels/modYoutube', streamerController.modYoutubeChannels);
+    router.get('/channels/myChannels', streamerController.myChannels);
 
     return router;
 }
