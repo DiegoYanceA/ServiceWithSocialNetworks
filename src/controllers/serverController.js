@@ -12,6 +12,7 @@ findServerMC = async (ip) => {
 exports.anyServerMinecraft = async (req, res) => {
     var { ip } = req.params;
     var data = await findServerMC(ip)
+    data.hostname = ip;
     return res.json({
         servers: data
     });
@@ -24,6 +25,7 @@ exports.myServerMCRange = async (req, res) => {
     for(var i = 0; i < serversApi.length; i++){
         var server = await findServerMC(serversApi[i].ip)
         server.nameServer = serversApi[i].nameServer;
+        server.hostname = serversApi[i].ip;
         servers.push(server);
     }
 

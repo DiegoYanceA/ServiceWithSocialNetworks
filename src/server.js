@@ -40,7 +40,7 @@ const create = async () => {
         res.render('index.html');
     });
 
-    app.use('/', router());
+    app.use('/api/v1/', router());
 
     // Error handler
     /* eslint-disable no-unused-vars */
