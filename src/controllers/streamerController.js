@@ -81,6 +81,24 @@ exports.modYoutubeChannels = async (req, res) => {
     });
 }
 
+
+exports.texturePackChannels = async (req, res) => {
+    var moderators = await Channel.find({haveTexture: true});
+    var channels = [];
+
+    //Iteracion de canales
+    for(var i = 0; i < moderators.length; i++){
+        var url = getUrlYoutube(moderators[i].idChannel);
+        var channel = await findYoutubeChannel(url);
+        channel.urlChannel = "https://www.youtube.com/channel/" + moderators[i].idChannel;
+        channels.push(channel)
+    }
+    
+    return res.json({
+        texturePack: channels
+    });
+}
+
 exports.myChannels = async (req, res, next) => {
     
     var channelYoutube = await findYoutubeChannel(getUrlYoutube(myYoutubeChannel));
