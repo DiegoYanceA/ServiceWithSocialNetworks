@@ -1,10 +1,13 @@
 const axios = require("axios");
+const queryString = require('querystring')
 const API_KEY = process.env.API_KEY_YOUTUBE;
 const Channel = require("../models/Channel");
 const Rol = require("../models/Rol");
 const myYoutubeChannel = "UCH5RD3yCZhuDf8V51rC1R7g";
 const myNameTwitch = "asdiegoYA";
 const tokenTwitch = process.env.TOKEN_TWITCH || "n5n7mmpzu7trb6774yovwmtgav858w";
+let tokenYoutube = "ya29.a0AfH6SMDz6jkMckiUf0c5Gvvte8yEAvDyzgNKyxukm-bFtkpjvEYoj8a9WOq_Adz8W9cfJBOxZxmS9FKnTgMRZk2LnseUgsioYJ971QZS19LHbtRwF_UHNUPwZP-v8mz2fLcrFNsE-IH8EYroHd3cnq9kKGog";
+const mode = process.env.MODE || "DEVELOPMENT";
 
 //API YOUTUBE
 findYoutubeChannel = async (url) => {
@@ -32,6 +35,7 @@ findTwitchChannel = async (name) => {
             'Accept': 'application/vnd.twitchtv.v5+json'
         },
     });
+
     var channel = {
         followers: response.data.followers,
         channelName: response.data.name,
@@ -103,7 +107,7 @@ exports.myChannels = async (req, res, next) => {
     
     var channelYoutube = await findYoutubeChannel(getUrlYoutube(myYoutubeChannel));
     var channelTwitch = await findTwitchChannel(myNameTwitch)
-
+    
     var myChannel = {
         names: {
             twitch: channelTwitch.channelName,
@@ -124,37 +128,137 @@ exports.myChannels = async (req, res, next) => {
     });
 }
 
+exports.mySubscribersYT = async (req, res, next) => {
+    var { max } = req.params;
+    var endpointToken = "";
+    if(mode == "PRODUCTION"){
+        endpointToken = "https://asdiegoya.azurewebsites.net/api/v1/channels/myTokenYoutubeRefresh"
+    } else {
+        endpointToken = "http://localhost:3000/api/v1/channels/myTokenYoutubeRefresh"
+    }
+    
+    var responseToken = await axios.post(endpointToken);
+    
+    tokenYoutube = responseToken.data.newToken.access_token
 
-exports.mySubscribers = async (req, res, next) => {
-    // var url = "https://youtube.googleapis.com/youtube/v3/subscriptions?part=snippet%2CcontentDetails&maxResults=1000&mySubscribers=true&key="+API_KEY
-    // var token = "4/0AY0e-g6Ab3O8wgBLS69zfpD2rgGKklXgcMfMZfk6g5kmFO1At46KWXmdI-28fsoTp7VN3g"
-    var url = "";
-    var token = "4/0AY0e-g6Ab3O8wgBLS69zfpD2rgGKklXgcMfMZfk6g5kmFO1At46KWXmdI-28fsoTp7VN3g"
-    var response = await axios.get(url, {
-        headers: {
-            Authorization: 'Bearer ' + token,
-            Accept: 'application/json'
+    var mySubscribers = []
+    var endpoint = "https://youtube.googleapis.com/youtube/v3/subscriptions?part=snippet&maxResults=" + max + "&myRecentSubscribers=true&key=" + API_KEY
+    try {
+        var responseSuscribers = await axios.get(endpoint, {
+            headers: {
+                Authorization: 'Bearer ' + tokenYoutube,
+                Accept: 'application/json'
+            }
+        });
+        if(responseSuscribers.data != null){
+            for(var i = 0; i < responseSuscribers.data.items.length ; i++){
+                var channelId = responseSuscribers.data.items[i].snippet.channelId
+                var url = getUrlYoutube(channelId);
+                var channel = await findYoutubeChannel(url);
+                channel.urlChannel = "https://www.youtube.com/channel/" + channelId;
+                mySubscribers.push(channel)
+            }
         }
+    } catch(e){
+        return res.json({
+            data: e.responseSuscribers.data
+        });
+    }
+
+    return res.json({
+        mySubscribers: mySubscribers
     });
-    console.log(response)
+}
+
+exports.myTokenYoutube = async (req, res, next) => {
+    var data = {
+        "client_id": '1076409570713-viv5fhmig3vfjh0t11tkmuilsf0qtu0l.apps.googleusercontent.com',
+        "client_secret": 'OMZfsyvvQaBr5kHtryRUz31P',
+        "grant_type": 'authorization_code',
+        "code":'4/0AY0e-g4N3cThG3lSCTX0yDFGW94H6Sl387vw86ThHvfA-AMm6H5LOp3SdwHrg3qKqcT3YQ',
+        "redirect_uri": 'http://localhost:3000'
+    }
+
+    var endpoint ="https://accounts.google.com/o/oauth2/token";
+
+    try {
+        var response = await axios.post(endpoint, queryString.stringify(data), {
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Host": "accounts.google.com"
+            }
+        });
+
+    } catch (e) {
+        console.log(e.response.data)
+    }
+
+    // try{
+        
+    // } catch(e) {
+    //     console.log(e)
+    // }
     return res.json({
         mySubscribers: response.data
     });
 }
 
-exports.myTokenYoutube = async (req, res, next) => {
-    console.log("Gaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-    var url ="http://accounts.google.com/o/oauth2/token?code=4/0AY0e-g7z6COxjiyQyycOMcqkdFjKoxyuosiVo3TvaAV6098wvmoEHcYZhNkuB1Ty9NeT5g&client_id=1076409570713-viv5fhmig3vfjh0t11tkmuilsf0qtu0l.apps.googleusercontent.com&client_secret=OMZfsyvvQaBr5kHtryRUz31P&redirect_uri=http://localhost:3000/oauth2callback&grant_type=authorization_code"
-    
-    var response = await axios.get(url, {
-        headers: {
-            "Content-Type": 'application/x-www-form-urlencoded',
-            "Host": "http://accounts.google.com"
-        }
-    });
-    console.log(response)
+exports.myTokenYoutubeRefresh = async (req, res, next) => {
+    var data = {
+        "client_id": '1076409570713-viv5fhmig3vfjh0t11tkmuilsf0qtu0l.apps.googleusercontent.com',
+        "client_secret": 'OMZfsyvvQaBr5kHtryRUz31P',
+        "grant_type": 'refresh_token',
+        "refresh_token":'1//053_WcX3Y--wECgYIARAAGAUSNwF-L9IrSaGXR5Vcccp5i7SGrqULeRspuV2sPVvhMKfJP3KkstDv7xaE35faO22exnanHo5gar4'
+    }
+
+    var endpoint ="https://accounts.google.com/o/oauth2/token";
+
+    try {
+        var response = await axios.post(endpoint, queryString.stringify(data), {
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Host": "accounts.google.com"
+            }
+        });
+    } catch (e) {
+        console.log(e.response.data)
+    }
+
     return res.json({
-        mySubscribers: response.data
+        newToken: response.data
+    });
+}
+
+
+exports.myTokenDiscord = async (req, res, next) => {
+    var data = {
+        client_id: '830245483187535884',
+        client_secret: 'bBvMERERsH84wU7kh2hYXvw-knFO5yBm',
+        grant_type: 'authorization_code',
+        code:'d561SKFs7UMcCAoKRJOHFk4oPkaelM',
+        redirect_uri: 'http://localhost:3000'
+    }
+
+    var parametros = "client_id=" + data.client_id + "&client_secret=" + data.client_secret + "&grant_type=" + data.grant_type + "&code=" + data.code +  +"&redirect_uri=" + data.redirect_uri
+
+    var url ="https://discord.com/api/v8/oauth2/token?" + parametros;
+    // var url ="https://discord.com/api/v8/oauth2/token";
+    
+    try {
+        var response = await axios.post(url , {} ,{
+            headers: {
+                "Content-Type": 'application/x-www-form-urlencoded'
+            }
+        });
+    } catch (e) {
+        console.log(e)
+    }
+    
+    
+    // console.log(res.data.headers['Content-Type'])
+
+    return res.json({
+        discord: response.data
     });
 }
 

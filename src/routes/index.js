@@ -20,9 +20,13 @@ module.exports = function () {
     router.get('/channels/modYoutube', streamerController.modYoutubeChannels);
     router.get('/channels/texturePack', streamerController.texturePackChannels);
     router.post('/channels/myTokenYoutube', streamerController.myTokenYoutube);
+    router.post('/channels/myTokenYoutubeRefresh', streamerController.myTokenYoutubeRefresh);
     router.get('/channels/myChannels', streamerController.myChannels);
-    router.get('/channels/mySubscribers', streamerController.mySubscribers);
+    router.get('/channels/mySubscribersYT/:max', streamerController.mySubscribersYT);
     router.post('/channels/myTokenYoutube', streamerController.myTokenYoutube);
+
+    //Discord
+    router.post('/channels/myTokenDiscord', streamerController.myTokenDiscord);
 
     //Server
     router.get('/servers/serverMinecraft/:ip', serverController.anyServerMinecraft);
