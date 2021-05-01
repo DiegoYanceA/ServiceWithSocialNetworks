@@ -5,11 +5,15 @@ const Channel = require("../models/Channel");
 const Rol = require("../models/Rol");
 const myYoutubeChannel = "UCH5RD3yCZhuDf8V51rC1R7g";
 const myNameTwitch = "asdiegoYA";
-const tokenTwitch = process.env.TOKEN_TWITCH || "n5n7mmpzu7trb6774yovwmtgav858w";
+const TokenTwitch = process.env.TOKEN_TWITCH || "n5n7mmpzu7trb6774yovwmtgav858w";
 let tokenYoutube = "ya29.a0AfH6SMDz6jkMckiUf0c5Gvvte8yEAvDyzgNKyxukm-bFtkpjvEYoj8a9WOq_Adz8W9cfJBOxZxmS9FKnTgMRZk2LnseUgsioYJ971QZS19LHbtRwF_UHNUPwZP-v8mz2fLcrFNsE-IH8EYroHd3cnq9kKGog";
 const mode = process.env.MODE || "DEVELOPMENT";
 
+const ClientID = process.env.CLIENTID_TWITCH || "3375bfutpo46g5nqrlvqzeibzf8aar";
+const TwitchID = "565553685"; 
+
 //API YOUTUBE
+//Encuentra un canal de Youtube con sus datos mediante su ID
 findYoutubeChannel = async (url) => {
 
     var response = await axios.get(url);
@@ -26,16 +30,17 @@ findYoutubeChannel = async (url) => {
     return channel;
 }
 
-findTwitchChannel = async (name) => {
+//Encuentra un canal de Twitch con sus datos mediante su nombre
+findMyTwitchChannel = async (name) => {
     var url = "https://api.twitch.tv/kraken/channel?channel_read=" + name;
+    console.log(url)
     var response = await axios.get(url, {
         headers: {
-            'Client-ID' : 'zgmzwspqg698alw31rhuhee2u2wzaj',
-            'Authorization' : 'OAuth ' + tokenTwitch,
+            'Client-ID' : ClientID,
+            'Authorization' : 'OAuth ' + TokenTwitch,
             'Accept': 'application/vnd.twitchtv.v5+json'
         },
     });
-
     var channel = {
         followers: response.data.followers,
         channelName: response.data.name,
@@ -85,7 +90,6 @@ exports.modYoutubeChannels = async (req, res) => {
     });
 }
 
-
 exports.texturePackChannels = async (req, res) => {
     var moderators = await Channel.find({haveTexture: true});
     var channels = [];
@@ -106,7 +110,7 @@ exports.texturePackChannels = async (req, res) => {
 exports.myChannels = async (req, res, next) => {
     
     var channelYoutube = await findYoutubeChannel(getUrlYoutube(myYoutubeChannel));
-    var channelTwitch = await findTwitchChannel(myNameTwitch)
+    var channelTwitch = await findMyTwitchChannel(myNameTwitch)
     
     var myChannel = {
         names: {
@@ -229,7 +233,6 @@ exports.myTokenYoutubeRefresh = async (req, res, next) => {
     });
 }
 
-
 exports.myTokenDiscord = async (req, res, next) => {
     var data = {
         client_id: '830245483187535884',
@@ -262,3 +265,80 @@ exports.myTokenDiscord = async (req, res, next) => {
     });
 }
 
+exports.myIdTwitch = async (req, res, next) => {
+    var endpoint = "https://api.twitch.tv/helix/users";
+    try {
+        var response = await axios.get(endpoint, {
+            headers: {
+                'Client-Id' : ClientID,
+                'Authorization' : 'Bearer ' + TokenTwitch
+            },
+        });
+    } catch (e) {
+        return res.json({
+            twitch: e
+        });
+    }
+    
+
+    return res.json({
+        twitch: response.data
+    });
+}
+
+findTwitchChannel = async (name) => {
+    var url = "https://api.twitch.tv/helix/search/channels?query=" + name;
+    var response = await axios.get(url, {
+        headers: {
+            'Client-ID' : ClientID,
+            'Authorization' : 'Bearer ' + TokenTwitch
+        },
+    });
+    var channelAux = {};
+    if(response.data.data.length != 0) {
+        for(var i = 0; i < response.data.data.length; i++){
+            if(response.data.data[i].display_name.localeCompare(name) == 0){
+                channelAux = response.data.data[i];
+                break;
+            }
+        }
+    }
+    
+    var channel = {
+        channelName: name,
+        channelPhoto: channelAux.thumbnail_url,
+        isLive: channelAux.is_live
+    }
+
+    
+    return channel;
+}
+
+exports.myFollowTwitch = async (req, res, next) => {
+    var { max } = req.params;
+    var endpoint = "https://api.twitch.tv/helix/users/follows?first=" + max +"&to_id=" + TwitchID;
+    try {
+        var response = await axios.get(endpoint, {
+            headers: {
+                'Client-Id' : ClientID,
+                'Authorization' : 'Bearer ' + TokenTwitch
+            },
+        });
+    } catch (e) {
+        return res.json({
+            twitch: e
+        });
+    }
+
+    var channelTwitch = [];
+    for(var i = 0; i < response.data.data.length; i++){
+        var name = response.data.data[i].from_name;
+        var channel = await findTwitchChannel(name)
+        channel.urlChannel = "http://twitch.tv/" + name;
+        channelTwitch.push(channel);
+    }
+
+    return res.json({
+        myFollowers: channelTwitch
+    });
+}

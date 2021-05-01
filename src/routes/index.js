@@ -25,6 +25,10 @@ module.exports = function () {
     router.get('/channels/mySubscribersYT/:max', streamerController.mySubscribersYT);
     router.post('/channels/myTokenYoutube', streamerController.myTokenYoutube);
 
+    //Twitch
+    // router.get('/channels/myIdTwitch', streamerController.myIdTwitch);
+    router.get('/channels/myFollowTwitch/:max', streamerController.myFollowTwitch);
+
     //Discord
     router.post('/channels/myTokenDiscord', streamerController.myTokenDiscord);
 
