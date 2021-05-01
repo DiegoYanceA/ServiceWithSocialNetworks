@@ -141,6 +141,16 @@ exports.mySubsCountYT = async (req, res, next) => {
     });
 }
 
+exports.myFollowsCountYT = async (req, res, next) => {
+    // res.header('Access-Control-Allow-Origin', '*');
+    console.log("TEST")
+    var channelYoutube = await findYoutubeChannel(getUrlYoutube(myYoutubeChannel));
+    var subsCount = channelYoutube.statistics.subscriberCount;
+    return res.json({
+        subsCount: subsCount
+    });
+}
+
 exports.mySubscribersYT = async (req, res, next) => {
     var { max } = req.params;
     var endpointToken = "";
