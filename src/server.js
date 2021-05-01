@@ -14,43 +14,54 @@ const mode = process.env.MODE || "DEVELOPMENT";
 // };
 
 // fn to create express server
-const create = async () => {
+// server
+const app = express();
 
-    // server
-    const app = express();
+// configure nonFeature
+// app.use(ignoreFavicon);
 
-    // configure nonFeature
-    // app.use(ignoreFavicon);
+//json
+app.use(express.json());
+app.use(express.urlencoded({extended: true}))
+app.use(cors());
+
+if(mode == "PRODUCTION"){
+    app.use(history());
+    app.use(express.static(__dirname + '/../public/'));
     
-    //json
-    app.use(express.json());
-    app.use(express.urlencoded({extended: true}))
-    app.use(cors());
-    
-    if(mode == "PRODUCTION"){
-        app.use(history());
-        app.use(express.static(__dirname + '/../public/'));
-        
-    }
+} else {
+    app.use(express.static(path.join(__dirname, '/../public/')));
+}
 
-    // root route - serve static file
-    app.get('/', (req, res) => {
-        // res.send('<h2>Bienvenido: Ingresaste al Servidor</h2>');
+// root route - serve static file
+// app.get('/', (req, res) => {
+//     // res.send('<h2>Bienvenido: Ingresaste al Servidor</h2>');
 
-        res.render('index.html');
-    });
+//     res.render('index.html');
+// });
 
-    app.use('/api/v1/', router());
+app.use('/api/v1/', router());
 
-    // Error handler
-    /* eslint-disable no-unused-vars */
-    app.use((err, req, res, next) => {
-        console.error(err.stack);
-        res.status(500).send('Something broke!');
-    });
-    return app;
-};
+// app.use((req, res, next) => {
+//     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
+//     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+//     res.setHeader('Access-Control-Allow-Credentials', true);
+  
+//     next();
+//   });
+
+// Error handler
+/* eslint-disable no-unused-vars */
+// app.use((err, req, res, next) => {
+//     console.error(err.stack);
+//     res.status(500).send('Something broke!');
+// });
+
+const http = require('http').Server(app);
+
+// const socket = require('./socket');
+// socket(http);
 
 module.exports = {
-    create
+    http
 };

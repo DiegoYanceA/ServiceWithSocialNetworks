@@ -24,6 +24,7 @@ module.exports = function () {
     router.get('/channels/myChannels', streamerController.myChannels);
     router.get('/channels/mySubscribersYT/:max', streamerController.mySubscribersYT);
     router.post('/channels/myTokenYoutube', streamerController.myTokenYoutube);
+    router.get('/channels/mySubsCountYT', streamerController.mySubsCountYT);
 
     //Twitch
     // router.get('/channels/myIdTwitch', streamerController.myIdTwitch);

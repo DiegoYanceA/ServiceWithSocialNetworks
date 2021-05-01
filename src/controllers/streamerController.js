@@ -33,7 +33,6 @@ findYoutubeChannel = async (url) => {
 //Encuentra un canal de Twitch con sus datos mediante su nombre
 findMyTwitchChannel = async (name) => {
     var url = "https://api.twitch.tv/kraken/channel?channel_read=" + name;
-    console.log(url)
     var response = await axios.get(url, {
         headers: {
             'Client-ID' : ClientID,
@@ -129,6 +128,16 @@ exports.myChannels = async (req, res, next) => {
 
     return res.json({
         myChannel: myChannel
+    });
+}
+
+exports.mySubsCountYT = async (req, res, next) => {
+    // res.header('Access-Control-Allow-Origin', '*');
+    console.log("TEST")
+    var channelYoutube = await findYoutubeChannel(getUrlYoutube(myYoutubeChannel));
+    var subsCount = channelYoutube.statistics.subscriberCount;
+    return res.json({
+        subsCount: subsCount
     });
 }
 
