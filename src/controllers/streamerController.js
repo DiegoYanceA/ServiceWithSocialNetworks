@@ -6,7 +6,7 @@ const Rol = require("../models/Rol");
 const myYoutubeChannel = "UCH5RD3yCZhuDf8V51rC1R7g";
 const myNameTwitch = "asdiegoYA";
 const TokenTwitch = process.env.TOKEN_TWITCH || "n5n7mmpzu7trb6774yovwmtgav858w";
-let tokenYoutube = "ya29.a0AfH6SMDz6jkMckiUf0c5Gvvte8yEAvDyzgNKyxukm-bFtkpjvEYoj8a9WOq_Adz8W9cfJBOxZxmS9FKnTgMRZk2LnseUgsioYJ971QZS19LHbtRwF_UHNUPwZP-v8mz2fLcrFNsE-IH8EYroHd3cnq9kKGog";
+let tokenYoutube = "ya29.a0AfH6SMCz2uMhcuGhZS2btD32Oz0RdDcFXWPTYFNTJvjcLFeIpbyDjVteLrdiqXTbAKUw23w192Fq4IliBoxfK8xJyA3Rhyt3qGUVS7q2U62KS-chc8CX784jpSj7pvpsFpKAerPzHviw2tzFR7ZdDtIMJ_zl";
 const mode = process.env.MODE || "DEVELOPMENT";
 
 const ClientID = process.env.CLIENTID_TWITCH || "3375bfutpo46g5nqrlvqzeibzf8aar";
@@ -15,9 +15,9 @@ const TwitchID = "565553685";
 //API YOUTUBE
 //Encuentra un canal de Youtube con sus datos mediante su ID
 findYoutubeChannel = async (url) => {
-
+  
     var response = await axios.get(url);
-    
+
     var data = response.data.items[0];
     var channelName = data.snippet.title;
     var channelPhoto = data.snippet.thumbnails;
@@ -49,7 +49,7 @@ findMyTwitchChannel = async (name) => {
 }
 
 getUrlYoutube = (idChannel) => {
-    var url = "https://www.googleapis.com/youtube/v3/channels?id= "+ idChannel +"&key=" + API_KEY + "&part=snippet,contentDetails,statistics,status";
+    var url = "https://www.googleapis.com/youtube/v3/channels?id="+ idChannel +"&key=" + API_KEY + "&part=snippet,contentDetails,statistics,status";
     return url;
 }
 
@@ -133,7 +133,7 @@ exports.myChannels = async (req, res, next) => {
 
 exports.mySubsCountYT = async (req, res, next) => {
     // res.header('Access-Control-Allow-Origin', '*');
-    console.log("TEST")
+    
     var channelYoutube = await findYoutubeChannel(getUrlYoutube(myYoutubeChannel));
     var subsCount = channelYoutube.statistics.subscriberCount;
     return res.json({
@@ -143,7 +143,7 @@ exports.mySubsCountYT = async (req, res, next) => {
 
 exports.myFollowsCountYT = async (req, res, next) => {
     // res.header('Access-Control-Allow-Origin', '*');
-    console.log("TEST")
+
     var channelYoutube = await findYoutubeChannel(getUrlYoutube(myYoutubeChannel));
     var subsCount = channelYoutube.statistics.subscriberCount;
     return res.json({
@@ -193,12 +193,22 @@ exports.mySubscribersYT = async (req, res, next) => {
     });
 }
 
+/**
+ * 
+https://accounts.google.com/o/oauth2/auth?
+  client_id=760735499293-4eqlvjaivd9m4l5b9kouk0u2h1bi7j4t.apps.googleusercontent.com&
+  redirect_uri=http%3A%2F%2Flocalhost%3A3000&
+  scope=https://www.googleapis.com/auth/youtube&
+  response_type=code&
+  access_type=offline
+ */
+
 exports.myTokenYoutube = async (req, res, next) => {
     var data = {
-        "client_id": '1076409570713-viv5fhmig3vfjh0t11tkmuilsf0qtu0l.apps.googleusercontent.com',
-        "client_secret": 'OMZfsyvvQaBr5kHtryRUz31P',
+        "client_id": '760735499293-4eqlvjaivd9m4l5b9kouk0u2h1bi7j4t.apps.googleusercontent.com',
+        "client_secret": 'hvBT7bvRK8IPAWKAh0v4NeB3',
         "grant_type": 'authorization_code',
-        "code":'4/0AY0e-g4N3cThG3lSCTX0yDFGW94H6Sl387vw86ThHvfA-AMm6H5LOp3SdwHrg3qKqcT3YQ',
+        "code":'4/0AY0e-g6v_ChiamhoTEY0erpD3wjxwCUsBioeuq7Gk7UQ1_RrpmF9HcpJkQCFThK2slgLBQ',
         "redirect_uri": 'http://localhost:3000'
     }
 
@@ -228,10 +238,10 @@ exports.myTokenYoutube = async (req, res, next) => {
 
 exports.myTokenYoutubeRefresh = async (req, res, next) => {
     var data = {
-        "client_id": '1076409570713-viv5fhmig3vfjh0t11tkmuilsf0qtu0l.apps.googleusercontent.com',
-        "client_secret": 'OMZfsyvvQaBr5kHtryRUz31P',
+        "client_id": '760735499293-4eqlvjaivd9m4l5b9kouk0u2h1bi7j4t.apps.googleusercontent.com',
+        "client_secret": 'hvBT7bvRK8IPAWKAh0v4NeB3',
         "grant_type": 'refresh_token',
-        "refresh_token":'1//053_WcX3Y--wECgYIARAAGAUSNwF-L9IrSaGXR5Vcccp5i7SGrqULeRspuV2sPVvhMKfJP3KkstDv7xaE35faO22exnanHo5gar4'
+        "refresh_token":'1//05J0U7YiIHtvVCgYIARAAGAUSNwF-L9IrO51tGJ-1in8Ejpcu7GeHKvIOm1SZnXlskCEmPIIyWMxbomF0npjGJjYVWQA-dcsr9b0'
     }
 
     var endpoint ="https://accounts.google.com/o/oauth2/token";
