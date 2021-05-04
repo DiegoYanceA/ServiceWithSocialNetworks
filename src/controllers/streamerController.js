@@ -2,15 +2,21 @@ const axios = require("axios");
 const queryString = require('querystring')
 const API_KEY = process.env.API_KEY_YOUTUBE;
 const Channel = require("../models/Channel");
+const mode = process.env.MODE || "DEVELOPMENT";
 const Rol = require("../models/Rol");
+
+//Token
 const myYoutubeChannel = "UCH5RD3yCZhuDf8V51rC1R7g";
 const myNameTwitch = "asdiegoYA";
-const TokenTwitch = process.env.TOKEN_TWITCH || "n5n7mmpzu7trb6774yovwmtgav858w";
-let tokenYoutube = "ya29.a0AfH6SMCz2uMhcuGhZS2btD32Oz0RdDcFXWPTYFNTJvjcLFeIpbyDjVteLrdiqXTbAKUw23w192Fq4IliBoxfK8xJyA3Rhyt3qGUVS7q2U62KS-chc8CX784jpSj7pvpsFpKAerPzHviw2tzFR7ZdDtIMJ_zl";
-const mode = process.env.MODE || "DEVELOPMENT";
+let TokenYoutube = "ya29.a0AfH6SMCz2uMhcuGhZS2btD32Oz0RdDcFXWPTYFNTJvjcLFeIpbyDjVteLrdiqXTbAKUw23w192Fq4IliBoxfK8xJyA3Rhyt3qGUVS7q2U62KS-chc8CX784jpSj7pvpsFpKAerPzHviw2tzFR7ZdDtIMJ_zl";
 
-const ClientID = process.env.CLIENTID_TWITCH || "3375bfutpo46g5nqrlvqzeibzf8aar";
+//Twitch
+const TokenTwitch = process.env.TOKEN_TWITCH || "n5n7mmpzu7trb6774yovwmtgav858w";
+const ClientID_TWITCH = process.env.CLIENTID_TWITCH || "3375bfutpo46g5nqrlvqzeibzf8aar";
 const TwitchID = "565553685"; 
+
+//DISCORD
+let TokenDiscord = "irDNF8tRPnWVLZB3V5Kr1phurwWaSX";
 
 //API YOUTUBE
 //Encuentra un canal de Youtube con sus datos mediante su ID
@@ -35,7 +41,7 @@ findMyTwitchChannel = async (name) => {
     var url = "https://api.twitch.tv/kraken/channel?channel_read=" + name;
     var response = await axios.get(url, {
         headers: {
-            'Client-ID' : ClientID,
+            'Client-ID' : ClientID_TWITCH,
             'Authorization' : 'OAuth ' + TokenTwitch,
             'Accept': 'application/vnd.twitchtv.v5+json'
         },
@@ -162,14 +168,14 @@ exports.mySubscribersYT = async (req, res, next) => {
     
     var responseToken = await axios.post(endpointToken);
     
-    tokenYoutube = responseToken.data.newToken.access_token
+    TokenYoutube = responseToken.data.newToken.access_token
 
     var mySubscribers = []
     var endpoint = "https://youtube.googleapis.com/youtube/v3/subscriptions?part=snippet&maxResults=" + max + "&myRecentSubscribers=true&key=" + API_KEY
     try {
         var responseSuscribers = await axios.get(endpoint, {
             headers: {
-                Authorization: 'Bearer ' + tokenYoutube,
+                Authorization: 'Bearer ' + TokenYoutube,
                 Accept: 'application/json'
             }
         });
@@ -226,11 +232,6 @@ exports.myTokenYoutube = async (req, res, next) => {
         console.log(e.response.data)
     }
 
-    // try{
-        
-    // } catch(e) {
-    //     console.log(e)
-    // }
     return res.json({
         mySubscribers: response.data
     });
@@ -262,44 +263,12 @@ exports.myTokenYoutubeRefresh = async (req, res, next) => {
     });
 }
 
-exports.myTokenDiscord = async (req, res, next) => {
-    var data = {
-        client_id: '830245483187535884',
-        client_secret: 'bBvMERERsH84wU7kh2hYXvw-knFO5yBm',
-        grant_type: 'authorization_code',
-        code:'d561SKFs7UMcCAoKRJOHFk4oPkaelM',
-        redirect_uri: 'http://localhost:3000'
-    }
-
-    var parametros = "client_id=" + data.client_id + "&client_secret=" + data.client_secret + "&grant_type=" + data.grant_type + "&code=" + data.code +  +"&redirect_uri=" + data.redirect_uri
-
-    var url ="https://discord.com/api/v8/oauth2/token?" + parametros;
-    // var url ="https://discord.com/api/v8/oauth2/token";
-    
-    try {
-        var response = await axios.post(url , {} ,{
-            headers: {
-                "Content-Type": 'application/x-www-form-urlencoded'
-            }
-        });
-    } catch (e) {
-        console.log(e)
-    }
-    
-    
-    // console.log(res.data.headers['Content-Type'])
-
-    return res.json({
-        discord: response.data
-    });
-}
-
 exports.myIdTwitch = async (req, res, next) => {
     var endpoint = "https://api.twitch.tv/helix/users";
     try {
         var response = await axios.get(endpoint, {
             headers: {
-                'Client-Id' : ClientID,
+                'Client-Id' : ClientID_TWITCH,
                 'Authorization' : 'Bearer ' + TokenTwitch
             },
         });
@@ -319,7 +288,7 @@ findTwitchChannel = async (name) => {
     var url = "https://api.twitch.tv/helix/search/channels?query=" + name;
     var response = await axios.get(url, {
         headers: {
-            'Client-ID' : ClientID,
+            'Client-ID' : ClientID_TWITCH,
             'Authorization' : 'Bearer ' + TokenTwitch
         },
     });
@@ -349,7 +318,7 @@ exports.myFollowTwitch = async (req, res, next) => {
     try {
         var response = await axios.get(endpoint, {
             headers: {
-                'Client-Id' : ClientID,
+                'Client-Id' : ClientID_TWITCH,
                 'Authorization' : 'Bearer ' + TokenTwitch
             },
         });
@@ -370,4 +339,70 @@ exports.myFollowTwitch = async (req, res, next) => {
     return res.json({
         myFollowers: channelTwitch
     });
+}
+
+
+//DISCORD
+/** 
+ https://discord.com/api/oauth2/authorize?
+	response_type=code&
+	client_id=830245483187535884&
+	scope=identify%20guilds.join&
+	state=15773059ghq9183habn&
+	redirect_uri=http://localhost:3000&
+	prompt=consent
+*/
+exports.myTokenDiscord = async (req, res, next) => {
+    var data = {
+        client_id: '830245483187535884',
+        client_secret: 'bBvMERERsH84wU7kh2hYXvw-knFO5yBm',
+        grant_type: 'authorization_code',
+        code:'mnRVwz97YygcdeZfNTlvOpR7oaSRII',
+        redirect_uri: 'http://localhost:3000'
+    }
+
+    // var parametros = "client_id=" + data.client_id + "&client_secret=" + data.client_secret + "&grant_type=" + data.grant_type + "&code=" + data.code +  +"&redirect_uri=" + data.redirect_uri
+
+    // var url ="https://discord.com/api/v8/oauth2/token?" + parametros;
+    var endpoint ="https://discord.com/api/v8/oauth2/token";
+    
+    try {
+        var response = await axios.post(endpoint , queryString.stringify(data) ,{
+            headers: {
+                "Content-Type": 'application/x-www-form-urlencoded'
+            }
+        });
+    } catch (e) {
+        console.log(e.response.data)
+    }
+    
+    
+    // console.log(res.data.headers['Content-Type'])
+
+    return res.json({
+        myToken: response.data
+    });
+}
+
+
+exports.myDiscord = async (req, res, next) => {
+    var idDiscord = "789992418393063425";
+    var endpoint ="https://discord.com/api/v8/guilds/" + idDiscord ;
+    // var endpoint ="https://discord.com/api/v8/users/@me/guilds";
+    try {
+        var response = await axios.get(endpoint ,{
+            headers: {
+                "Authorization": 'Bearer ' + TokenDiscord
+            }
+        });
+        return res.json({
+            myDiscord: response.data
+        });
+    } catch (e) {
+
+        return res.json({
+            error: e
+        });
+    }
+    
 }

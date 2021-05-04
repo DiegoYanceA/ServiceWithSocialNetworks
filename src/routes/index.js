@@ -24,7 +24,7 @@ module.exports = function () {
     router.get('/channels/myChannels', streamerController.myChannels);
     router.get('/channels/mySubscribersYT/:max', streamerController.mySubscribersYT);
     router.post('/channels/myTokenYoutube', streamerController.myTokenYoutube);
-    router.get('/channels/mySubsCountYT', streamerController.mySubsCountYT);
+    // router.get('/channels/mySubsCountYT', streamerController.mySubsCountYT);
 
     //Twitch
     // router.get('/channels/myIdTwitch', streamerController.myIdTwitch);
@@ -32,6 +32,7 @@ module.exports = function () {
 
     //Discord
     router.post('/channels/myTokenDiscord', streamerController.myTokenDiscord);
+    router.get('/channels/myDiscord', streamerController.myDiscord);
 
     //Server
     router.get('/servers/serverMinecraft/:ip', serverController.anyServerMinecraft);
