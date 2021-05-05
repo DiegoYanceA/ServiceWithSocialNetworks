@@ -14,11 +14,11 @@ module.exports = (http) => {
         console.log('User connected.', socket.id, messageAux);
         // socket.join('yt room');
         // socket.broadcast.emit("messageRandom", "world");
-        io.emit('messageRandom', messageAux);
+        socket.emit('changeMessageRandom', messageAux);
         socket.on('messageRandom', async (message) => {
             // var response = await axios.get("http://localhost:3000/api/v1/channels/mySubsCountYT")
             // var data = response.data
-            io.emit('messageRandom', message);
+            socket.broadcast.emit('changeMessageRandom', message);
             messageAux = message;
             // io.to('yt room').emit('messageRandom');
         });
