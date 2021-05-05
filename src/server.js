@@ -59,8 +59,8 @@ app.use('/api/v1/', router());
 
 const http = require('http').Server(app);
 
-const socket = require('./socket');
-socket(http);
+// const socket = require('./socket');
+// socket(http);
 
 module.exports = {
     http
