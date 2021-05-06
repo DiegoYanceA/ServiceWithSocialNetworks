@@ -467,20 +467,22 @@ exports.myDiscord = async (req, res, next) => {
     scope=donations.read+donations.create
 */
 exports.myTokenStreamlabs = async (req, res, next) => {
-    var code = req.query.code;
+    var code =  req.query.code;
     var redirect_uri = "";
     var client_id = ""
     var client_secret = "";
     if (mode == "PRODUCTION") {
+        code = "ou0sQp2eM1OrB6x3pfzmgmYC3A27nuE4588m1hZn";
         redirect_uri = "https://asdiegoya.azurewebsites.net";
         client_id = "RJrQkTE3IUfqLptkUV0kP0hEUDrLukHZ5cMMCSPS";
         client_secret = "okLzRiNnECyIPzQfn37eXo1SB2zUtROCgzRfBJq3";
     } else {
+        
         redirect_uri = "http://localhost:3000"
         client_id = "RJrQkTE3IUfqLptkUV0kP0hEUDrLukHZ5cMMCSPS";
         client_secret = "okLzRiNnECyIPzQfn37eXo1SB2zUtROCgzRfBJq3";
     }
-
+   
     var data = {
         "grant_type": "authorization_code",
         "client_id": client_id,
