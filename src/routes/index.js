@@ -32,8 +32,15 @@ module.exports = function () {
 
     //Discord
     router.post('/channels/myTokenDiscord', streamerController.myTokenDiscord);
+    // router.post('/channels/myTokenDiscordLogin', streamerController.myTokenDiscordLogin);
     router.get('/channels/myDiscord', streamerController.myDiscord);
+    router.get('/channels/myDiscordDetails', streamerController.myDiscordDetails);
 
+    //Streamlabs
+    router.get('/channels/myTokenStreamlabs', streamerController.myTokenStreamlabs);
+    router.post('/channels/myTokenStreamlabsRefresh', streamerController.myTokenStreamlabsRefresh);
+    router.get('/channels/myDonations', streamerController.myDonations);
+    
     //Server
     router.get('/servers/serverMinecraft/:ip', serverController.anyServerMinecraft);
     router.get('/servers/myServerMCRange', serverController.myServerMCRange);
