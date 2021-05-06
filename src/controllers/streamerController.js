@@ -305,7 +305,6 @@ findTwitchChannel = async (name) => {
             }
         }
     }
-
     var channel = {
         channelName: name,
         channelPhoto: channelAux.thumbnail_url,
@@ -462,7 +461,7 @@ exports.myDiscord = async (req, res, next) => {
 /*
     https://www.streamlabs.com/api/v1.0/authorize?
     client_id=RJrQkTE3IUfqLptkUV0kP0hEUDrLukHZ5cMMCSPS&
-    redirect_uri=http://localhost:3000/api/v1/channels/myTokenStreamlabs&
+    redirect_uri=http://localhost:3000&
     response_type=code&
     scope=donations.read+donations.create
 */
@@ -487,7 +486,7 @@ exports.myTokenStreamlabs = async (req, res, next) => {
         "grant_type": "authorization_code",
         "client_id": client_id,
         "client_secret": client_secret,
-        "redirect_uri": redirect_uri + "/api/v1/channels/myTokenStreamlabs",
+        "redirect_uri": redirect_uri,
         "code": code
     }
     var endpoint = "https://streamlabs.com/api/v1.0/token";
@@ -572,20 +571,34 @@ exports.myDonations = async (req, res, next) => {
     
     var data = {
         "access_token": TokenStreamlabs,
-        "limit": 10
+        "limit": 100
     }
 
     var endpoint = "https://streamlabs.com/api/v1.0/donations?" + queryString.stringify(data);
 
     try {
         var response = await axios.get(endpoint);
+        var donators = response.data.data;
+        var accountant = [];
+        for(var i = 0; i < donators.length; i++){
+            if (!accountant.includes(donators[i].email)){
+                accountant.push(donators[i].email)
+            }
+        }
 
-        // var donators = response.data.data;
-        // for(var i = 0; i < donators.length; i++){
+        var arrayDonators = Array(accountant.length);
+        for(var i = 0; i < donators.length; i++){
+            var index = accountant.indexOf(donators[i].email);
+            if(-1 < index){
+                if(arrayDonators[index] == null){
+                    arrayDonators[index] = [];
+                }
+                arrayDonators[index].push(donators[i])
+            }
+        }
 
-        // }
         return res.json({
-            myDonators: response.data.data
+            myDonators: arrayDonators
         });
     } catch (e) {
         // console.log(e.response.data)
