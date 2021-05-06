@@ -471,12 +471,10 @@ exports.myTokenStreamlabs = async (req, res, next) => {
     var client_id = ""
     var client_secret = "";
     if (mode == "PRODUCTION") {
-        code = "ou0sQp2eM1OrB6x3pfzmgmYC3A27nuE4588m1hZn";
         redirect_uri = "https://asdiegoya.azurewebsites.net";
         client_id = "RGuWKlWFjq9kZDUHkpFucIEt81ZrEC4gvSl7LkHe";
         client_secret = "oFXHtlRQbVRDnFOERvL2d2VYPPjfbg0gfPgPNtzv";
     } else {
-        
         redirect_uri = "http://localhost:3000"
         client_id = "RJrQkTE3IUfqLptkUV0kP0hEUDrLukHZ5cMMCSPS";
         client_secret = "okLzRiNnECyIPzQfn37eXo1SB2zUtROCgzRfBJq3";
