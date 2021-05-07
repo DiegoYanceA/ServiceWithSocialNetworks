@@ -18,16 +18,13 @@ module.exports = (http) => {
         socket.emit('changeMessageRandom', messageAux);
         socket.emit('changeMessage', enableMessage);
 
-        if(enableMessage){
-          socket.on('messageRandom', async (message) => {
-            // var response = await axios.get("http://localhost:3000/api/v1/channels/mySubsCountYT")
-            // var data = response.data
-            
-            socket.broadcast.emit('changeMessageRandom', message);
-            messageAux = message;
-            // io.to('yt room').emit('messageRandom');
-          });
-        }
+        socket.on('messageRandom', async (message) => {
+          // var response = await axios.get("http://localhost:3000/api/v1/channels/mySubsCountYT")
+          // var data = response.data
+          socket.broadcast.emit('changeMessageRandom', message);
+          messageAux = message;
+          // io.to('yt room').emit('messageRandom');
+        });
         
 
         socket.on('changeMessageServer', async (data) => {
