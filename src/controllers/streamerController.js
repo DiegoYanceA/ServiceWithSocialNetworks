@@ -541,7 +541,8 @@ exports.myTokenStreamlabsRefresh = async (req, res, next) => {
         });
         TokenRefreshStreamlabs = response.data.refresh_token;
         return res.json({
-            newToken: response.data
+            // newToken: response.data,
+            message: "Funciono pe"
         });
 
     } catch (e) {

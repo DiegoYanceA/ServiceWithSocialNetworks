@@ -1,11 +1,12 @@
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
+const secretKey = process.env.SECTRE_KEY_ASDIEGOYA;
 
 exports.signup =  async (req, res, next) => {
-    const { username, email, password} = req.body;
+    const { username, password} = req.body;
     var msg = "";
 
-    if(!(username && email && password)) {
+    if(!(username && password)) {
         
         msg = "Los campos no deben estar vacios."
         return res.json({
@@ -14,7 +15,7 @@ exports.signup =  async (req, res, next) => {
         });
     }
 
-    const existUser = await User.findOne({ email: email });
+    const existUser = await User.findOne({ username: username });
 
     if(existUser){
         msg = "El usuario ya existe."
@@ -26,14 +27,13 @@ exports.signup =  async (req, res, next) => {
 
     const user = new User({
         username: username,
-        email: email,
         password: password
     })
 
     user.password = await user.encryptPassword(user.password);
     await user.save();
 
-    const token = jwt.sign({id: user._id}, "token_asdiegoya",{
+    const token = jwt.sign({id: user._id}, secretKey,{
         expiresIn: 60 * 3
     })
 
@@ -49,10 +49,10 @@ exports.signup =  async (req, res, next) => {
 };
 
 exports.signin = async (req, res, next) => {
-    const { email, password} = req.body;
+    const { username, password} = req.body;
     var msg = "";
 
-    if(!(email && password)) {
+    if(!(username && password)) {
         
         msg = "Los campos no deben estar vacios."
         return res.json({
@@ -61,11 +61,11 @@ exports.signin = async (req, res, next) => {
         });
     }
 
-    const user = await User.findOne({email: email})
+    const user = await User.findOne({username: username})
 
     if(!user){
         msg = "El usuario no existe."
-        return res.status(404).json({
+        return res.json({
             auth: false,
             msg: msg
         });
@@ -73,29 +73,32 @@ exports.signin = async (req, res, next) => {
 
     const validPassword = await user.validatePassword(password);
     if(!validPassword){
-        return res.status(401).json({auth: false, token: null})
+        msg = "La contraseña es incorrecta"
+        return res.json({auth: false, msg: msg})
     } 
 
-    const token = jwt.sign({id: user._id}, "token_asdiegoya",{
-        expiresIn: 60 * 3
+    const token = jwt.sign({id: user._id}, secretKey,{
+        expiresIn: 10 * 60
     })
 
-    return res.status(401).json({auth: true, token: token })
+    return res.json({auth: true, token: token })
 };
 
-exports.me = async (req, res, next) => {
+exports.home = async (req, res, next) => {
     
     const user = await User.findById(req.userId, {password: 0});
-    
+    var expired = req.expiredJWT;
+    // var date = new Date(expired).toLocaleString();
+    // console.log(date)
     if(!user){
         return res.json({
             msg: "El usuario no existe."
         })
     }
-
     return res.json({
         user: user,
         msg: "Tiene acceso a este recurso.",
-        user: user
+        expired: expired,
+        auth: true
     })
 }

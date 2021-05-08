@@ -1,17 +1,23 @@
 const jwt = require("jsonwebtoken");
+const secretKey = process.env.SECTRE_KEY_ASDIEGOYA;
 
 function verifyToken (req, res, next){
     const token = req.headers['x-access-token'];
     if(!token){
-        return res.status(401).json({
+        return res.json({
             auth: false,
             msg: "No tiene acceso a este recurso."
         })
     }
-
-    const decoded = jwt.verify(token, "token_asdiegoya");
-    req.userId = decoded.id;
-    next();
+    try {
+        const decoded = jwt.verify(token, secretKey);
+        // console.log(decoded)
+        req.expiredJWT = decoded.exp * 1000;
+        req.userId = decoded.id;
+        next();
+    } catch(e){
+        res.redirect("/")
+    }
 }
 
 module.exports = verifyToken;

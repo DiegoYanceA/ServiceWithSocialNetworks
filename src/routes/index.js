@@ -10,10 +10,10 @@ const userController = require('../controllers/userController');
 
 module.exports = function () {
 
-    router.post('/signin', authController.signin);
-    router.post('/signup', authController.signup);
-    router.get('/me', verifyToken, authController.me);
-    router.get('/privacy', policyController.policy);
+    router.post('/auth/signin', authController.signin);
+    router.post('/auth/signup', authController.signup);
+    router.get('/auth/home', verifyToken, authController.home);
+    // router.get('/privacy', policyController.policy);
 
     //Youtube
     router.get('/channels/anyYoutube/:idChannel', streamerController.anyYoutubeChannel);
