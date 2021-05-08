@@ -500,12 +500,14 @@ exports.myTokenStreamlabs = async (req, res, next) => {
         TokenRefreshStreamlabs = response.data.refresh_token;
 
         return res.json({
-            tokenStreamlabs: response.data
+            tokenStreamlabs: response.data,
+            message: "Funciono papi diego"
         });
     } catch (e) {
 
         return res.json({
-            error: e
+            error: e,
+            message: "F"
         });
     }
 
@@ -541,14 +543,15 @@ exports.myTokenStreamlabsRefresh = async (req, res, next) => {
         });
         TokenRefreshStreamlabs = response.data.refresh_token;
         return res.json({
-            // newToken: response.data,
-            message: "Funciono pe"
+            newToken: response.data,
+            message: "Funciono papi diego"
         });
 
     } catch (e) {
 
         return res.json({
-            newToken: e
+            newToken: e,
+            message: "F"
         });
     }
 
