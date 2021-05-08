@@ -34,7 +34,6 @@ module.exports = (http) => {
     });
 
     socket.on('emojiChangeClient', async (data) => {
-      console.log("Gaaa")
       socket.broadcast.emit('emojiChangeServer', data);
       emoji = data;
     });
