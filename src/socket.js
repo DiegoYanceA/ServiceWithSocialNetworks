@@ -23,6 +23,9 @@ module.exports = (http) => {
     socket.on('messageRandom', async (message) => {
       // var response = await axios.get("http://localhost:3000/api/v1/channels/mySubsCountYT")
       // var data = response.data
+      if(51 < message.length){
+        message = message.substring(0, 51);
+      }
       socket.broadcast.emit('changeMessageRandom', message);
       messageAux = message;
       // io.to('yt room').emit('messageRandom');
