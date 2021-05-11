@@ -11,7 +11,7 @@ module.exports = (http) => {
   });
   var messageAux = "";
   var enableMessage = true;
-  var emoji = "🙂";
+  var emoji = "https://static-cdn.jtvnw.net/emoticons/v2/307595784/default/light/1.0";
   io.on('connection', (socket) => {
     // console.log('User connected.', socket.id, messageAux);
     // socket.join('yt room');
