@@ -15,9 +15,19 @@ module.exports = (http) => {
   var enableMessage = true;
   var enableEmoji = true;
   var arrayEmojis = [];
+  var url = "";
+  const mode = process.env.MODE || "DEVELOPMENT";
+  if (mode == "PRODUCTION") {
+    url = "https://asdiegoya.azurewebsites.net";
+  } else {
+    url = "http://localhost:3000"
+  }
+
+
+
 
   io.on('connection', async (socket) => {
-    var response = await axios.get("http://localhost:3000/api/v1/emojis/getall")
+    var response = await axios.get(url + "/api/v1/emojis/getall")
     var arrayEmojis = response.data;
     // console.log('User connected.', socket.id, messageAux);
     // socket.join('yt room');
@@ -30,8 +40,8 @@ module.exports = (http) => {
 
     //Cambiar de mensaje
     socket.on('messageRandom', async (message) => {
-      
-      if(51 < message.length){
+
+      if (51 < message.length) {
         message = message.substring(0, 51);
       }
       socket.broadcast.emit('changeMessageRandom', message);
@@ -62,6 +72,6 @@ module.exports = (http) => {
       socket.broadcast.emit('changeArrayEmojisSever', data);
       arrayEmojis = data;
     });
-    
+
   });
 }
