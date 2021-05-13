@@ -3,6 +3,7 @@ const secretKey = process.env.SECTRE_KEY_ASDIEGOYA;
 
 function verifyToken (req, res, next){
     const token = req.headers['x-access-token'];
+
     if(!token){
         return res.json({
             auth: false,
@@ -12,11 +13,15 @@ function verifyToken (req, res, next){
     try {
         const decoded = jwt.verify(token, secretKey);
         // console.log(decoded)
-        req.expiredJWT = decoded.exp * 1000;
+        req.expired_at = decoded.exp - Math.floor(Date.now() / 1000);
         req.userId = decoded.id;
         next();
     } catch(e){
-        res.redirect("/")
+        // res.redirect("/")
+        return res.json({
+            auth: false,
+            msg: "No tiene acceso a este recurso."
+        })
     }
 }
 

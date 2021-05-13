@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const Rol = require("../models/Rol");
 const jwt = require("jsonwebtoken");
 const secretKey = process.env.SECTRE_KEY_ASDIEGOYA;
 
@@ -62,12 +63,13 @@ exports.signin = async (req, res, next) => {
     }
 
     const user = await User.findOne({username: username})
-
+    const rol = await Rol.findById(user.rol);
     if(!user){
         msg = "El usuario no existe."
         return res.json({
             auth: false,
-            msg: msg
+            msg: msg,
+            rol: rol.name
         });
     }
 
@@ -77,19 +79,28 @@ exports.signin = async (req, res, next) => {
         return res.json({auth: false, msg: msg})
     } 
 
+    //2 Horas con el token
     const token = jwt.sign({id: user._id}, secretKey,{
         expiresIn: 2 * 60 * 60
     })
 
-    return res.json({auth: true, token: token })
+    return res.json({auth: true, token: token, expiredJWT: req.expired_at })
 };
 
-exports.home = async (req, res, next) => {
+// exports.signout = async (req, res, next) => {
+//     var { token } = req.body;
+//     var destroy = jwt.destroy(token)
+//     console.log(destroy)
+//     return res.json({
+//         msg: "Se ha cerrado la sesión correctamente."
+//     })
+// }
+
+exports.existUser = async (req, res, next) => {
     
     const user = await User.findById(req.userId, {password: 0});
-    var expired = req.expiredJWT;
-    // var date = new Date(expired).toLocaleString();
-    // console.log(date)
+    const rol = await Rol.findById(user.rol);
+
     if(!user){
         return res.json({
             msg: "El usuario no existe."
@@ -98,7 +109,8 @@ exports.home = async (req, res, next) => {
     return res.json({
         user: user,
         msg: "Tiene acceso a este recurso.",
-        expired: expired,
-        auth: true
+        expired_at: req.expired_at,
+        auth: true,
+        rol: rol.name
     })
 }

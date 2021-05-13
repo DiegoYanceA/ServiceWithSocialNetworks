@@ -7,12 +7,14 @@ const policyController = require('../controllers/policyController');
 const streamerController = require('../controllers/streamerController');
 const serverController = require('../controllers/serverController');
 const userController = require('../controllers/userController');
+const emojiController = require('../controllers/emojiController');
 
 module.exports = function () {
 
     router.post('/auth/signin', authController.signin);
     router.post('/auth/signup', authController.signup);
-    router.get('/auth/home', verifyToken, authController.home);
+    // router.post('/auth/signout', verifyToken, authController.signout);
+    router.get('/auth/existUser', verifyToken, authController.existUser);
     // router.get('/privacy', policyController.policy);
 
     //Youtube
@@ -48,5 +50,10 @@ module.exports = function () {
     //User
     router.get('/users/getIp', userController.getIp);
 
+    //Emojis
+    // router.get('/emojis/getAll', verifyToken, emojiController.getAllEmojis);
+    router.get('/emojis/getAll', emojiController.getAllEmojis);
+    router.post('/emojis/create', verifyToken, emojiController.createEmoji);
+    router.delete('/emojis/delete/:id', verifyToken, emojiController.deleteEmoji);
     return router;
 }
