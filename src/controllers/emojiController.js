@@ -40,11 +40,20 @@ exports.createEmoji =  async (req, res, next) => {
             error: true
         })
     }
+    var emoji;
+    
+    if(type != ""){
+        emoji = new Emoji({
+            type: type,
+            image: image.trim()
+        })
+    } else {
+        emoji = new Emoji({
+            image: image.trim()
+        })
+    }
 
-    const emoji = new Emoji({
-        type: type,
-        image: image
-    })
+    
 
     await emoji.save();
 

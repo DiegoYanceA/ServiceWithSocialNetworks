@@ -14,8 +14,11 @@ module.exports = (http) => {
   var emoji = "https://static-cdn.jtvnw.net/emoticons/v2/307595784/default/light/1.0";
   var enableMessage = true;
   var enableEmoji = true;
+  var arrayEmojis = [];
 
-  io.on('connection', (socket) => {
+  io.on('connection', async (socket) => {
+    var response = await axios.get("http://localhost:3000/api/v1/emojis/getall")
+    var arrayEmojis = response.data;
     // console.log('User connected.', socket.id, messageAux);
     // socket.join('yt room');
     // socket.broadcast.emit("messageRandom", "world");
@@ -23,11 +26,11 @@ module.exports = (http) => {
     socket.emit('emojiChangeServer', emoji);
     socket.emit('changeMessageEnable', enableMessage);
     socket.emit('changeEmojiEnable', enableEmoji);
+    socket.emit('changeArrayEmojisSever', arrayEmojis.emojis);
 
     //Cambiar de mensaje
     socket.on('messageRandom', async (message) => {
-      // var response = await axios.get("http://localhost:3000/api/v1/channels/mySubsCountYT")
-      // var data = response.data
+      
       if(51 < message.length){
         message = message.substring(0, 51);
       }
@@ -52,6 +55,12 @@ module.exports = (http) => {
     socket.on('changeEmojiServer', async (data) => {
       socket.broadcast.emit('changeEmojiEnable', data);
       enableEmoji = data;
+    });
+
+    //Array de emojis
+    socket.on('changeArrayEmojisClient', async (data) => {
+      socket.broadcast.emit('changeArrayEmojisSever', data);
+      arrayEmojis = data;
     });
     
   });
