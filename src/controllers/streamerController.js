@@ -8,7 +8,7 @@ const Rol = require("../models/Rol");
 //Token
 const myYoutubeChannel = "UCH5RD3yCZhuDf8V51rC1R7g";
 const myNameTwitch = "asdiegoYA";
-let TokenYoutube = "ya29.a0AfH6SMA4mSu0VqV1Jyo3JH7NU2OZOrHkShaiue5m6f_LFNz7uqmy2sj4VzjbgZ2x31vxxF7rxibNw3w6bHNzaYHG6LpvqZdczYI62dwpWb_WISeOP9JZ850-7QIK79AeS_N5dLpeJk741mEMY_4_hiVChE05";
+let TokenYoutube = "ya29.a0AfH6SMA8it5SQY-FXGBNA4KVl8rIgGEViYWG2LCUPUl6QyDiwa7_hrPR0FdotOD6Tec3SBJ0Hxjv2k1aepdQw2XQdlUGTPayK12KLtMb6zCc-41FRqZHE2WtAfuhTV0iRpWLHKp_ZFckot0XetS3L7nl8T01";
 
 //Twitch
 const TokenTwitch = process.env.TOKEN_TWITCH || "n5n7mmpzu7trb6774yovwmtgav858w";
@@ -218,7 +218,7 @@ exports.myTokenYoutube = async (req, res, next) => {
         "client_id": '760735499293-4eqlvjaivd9m4l5b9kouk0u2h1bi7j4t.apps.googleusercontent.com',
         "client_secret": 'hvBT7bvRK8IPAWKAh0v4NeB3',
         "grant_type": 'authorization_code',
-        "code": '4/0AY0e-g4TXf3UbbeRalQwbvKy3iJBTU4yzMYAZgQ_HQeKWiRTxIjaf3ZAI74QKasEJOBGnQ',
+        "code": '4/0AY0e-g7cYt84j8Ix7FRHJYwxxzocYjB7JMTXzpDJwlDqy_V5t12DGyL07JZ93L_Gmz3QUg',
         "redirect_uri": 'http://localhost:3000'
     }
 
@@ -246,7 +246,7 @@ exports.myTokenYoutubeRefresh = async (req, res, next) => {
         "client_id": '760735499293-4eqlvjaivd9m4l5b9kouk0u2h1bi7j4t.apps.googleusercontent.com',
         "client_secret": 'hvBT7bvRK8IPAWKAh0v4NeB3',
         "grant_type": 'refresh_token',
-        "refresh_token": '1//05ow_E2SlroOjCgYIARAAGAUSNwF-L9IrxAJvM_8WkK-NIyWKIe21HtBsuL-5g9HSr8NDy0eaiWttFUWU_m98iaaWhYFcKTt87Q4'
+        "refresh_token": '1//05s9VdqwghlJhCgYIARAAGAUSNwF-L9IrnU_6KnABwwm4y-F5sArY48-CzL-1dNI_QyoIiIwFT6z1XKBOD-uKGDJGSjJR4h19990'
     }
 
     var endpoint = "https://accounts.google.com/o/oauth2/token";
