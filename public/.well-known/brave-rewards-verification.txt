@@ -1,4 +1,0 @@
-This is a Brave Rewards publisher verification file.
-
-Domain: asdiegoya.azurewebsites.net
-Token: 6ca145a1548865f2e4abe56aceb8e71118796d3afb490daf2fe745535ee54f46
