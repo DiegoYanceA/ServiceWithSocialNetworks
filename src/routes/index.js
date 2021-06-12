@@ -29,7 +29,7 @@ module.exports = function () {
     // router.get('/channels/mySubsCountYT', streamerController.mySubsCountYT);
 
     //Twitch
-    // router.get('/channels/myIdTwitch', streamerController.myIdTwitch);
+    router.get('/channels/myIdTwitch', streamerController.myIdTwitch);
     router.get('/channels/myFollowTwitch/:max', streamerController.myFollowTwitch);
 
     //Discord

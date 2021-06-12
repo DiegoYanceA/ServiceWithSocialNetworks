@@ -11,7 +11,7 @@ const myNameTwitch = "asdiegoYA";
 let TokenYoutube = "ya29.a0AfH6SMA8it5SQY-FXGBNA4KVl8rIgGEViYWG2LCUPUl6QyDiwa7_hrPR0FdotOD6Tec3SBJ0Hxjv2k1aepdQw2XQdlUGTPayK12KLtMb6zCc-41FRqZHE2WtAfuhTV0iRpWLHKp_ZFckot0XetS3L7nl8T01";
 
 //Twitch
-const TokenTwitch = process.env.TOKEN_TWITCH || "n5n7mmpzu7trb6774yovwmtgav858w";
+const TokenTwitch = process.env.TOKEN_TWITCH || "7qfae98fn3gfgpfai156s2ppxvw1wh";
 const ClientID_TWITCH = process.env.CLIENTID_TWITCH || "3375bfutpo46g5nqrlvqzeibzf8aar";
 const TwitchID = "565553685";
 
