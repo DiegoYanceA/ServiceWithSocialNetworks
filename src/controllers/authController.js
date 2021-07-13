@@ -81,7 +81,7 @@ exports.signin = async (req, res, next) => {
 
     //2 Horas con el token
     const token = jwt.sign({id: user._id}, secretKey,{
-        expiresIn: 2 * 60 * 60
+        expiresIn: 6 * 60 * 60
     })
 
     return res.json({auth: true, token: token, expiredJWT: req.expired_at })

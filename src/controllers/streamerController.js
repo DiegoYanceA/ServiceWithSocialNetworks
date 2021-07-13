@@ -4,6 +4,7 @@ const API_KEY = process.env.API_KEY_YOUTUBE;
 const Channel = require("../models/Channel");
 const mode = process.env.MODE || "DEVELOPMENT";
 const Rol = require("../models/Rol");
+const TokenModel = require("../models/Token");
 
 //Token
 const myYoutubeChannel = "UCH5RD3yCZhuDf8V51rC1R7g";
@@ -466,7 +467,7 @@ exports.myDiscord = async (req, res, next) => {
     scope=donations.read+donations.create
 */
 exports.myTokenStreamlabs = async (req, res, next) => {
-    var code =  req.query.code;
+    var code = req.query.code;
     var redirect_uri = "";
     var client_id = ""
     var client_secret = "";
@@ -479,7 +480,7 @@ exports.myTokenStreamlabs = async (req, res, next) => {
         client_id = "RJrQkTE3IUfqLptkUV0kP0hEUDrLukHZ5cMMCSPS";
         client_secret = "okLzRiNnECyIPzQfn37eXo1SB2zUtROCgzRfBJq3";
     }
-   
+
     var data = {
         "grant_type": "authorization_code",
         "client_id": client_id,
@@ -498,6 +499,16 @@ exports.myTokenStreamlabs = async (req, res, next) => {
 
         TokenStreamlabs = response.data.access_token;
         TokenRefreshStreamlabs = response.data.refresh_token;
+
+        var tokenID = "60ee14da1d9eff4ba802cb02";
+        const tokenTemp = await TokenModel.findById(tokenID);
+
+        tokenTemp.overwrite({
+            token: TokenStreamlabs,
+            tokenRefresh: TokenRefreshStreamlabs
+        });
+
+        await tokenTemp.save();
 
         return res.json({
             tokenStreamlabs: response.data,
@@ -523,6 +534,12 @@ exports.myTokenStreamlabsRefresh = async (req, res, next) => {
         redirect_uri = "http://localhost:3000";
         client_id = "RJrQkTE3IUfqLptkUV0kP0hEUDrLukHZ5cMMCSPS";
         client_secret = "okLzRiNnECyIPzQfn37eXo1SB2zUtROCgzRfBJq3";
+    }
+
+    if (TokenRefreshStreamlabs == '') {
+        var tokenID = "60ee14da1d9eff4ba802cb02";
+        const tokenTemp = await TokenModel.findById(tokenID);
+        TokenRefreshStreamlabs = tokenTemp.tokenRefresh;
     }
 
     var data = {
@@ -555,7 +572,7 @@ exports.myTokenStreamlabsRefresh = async (req, res, next) => {
         });
     }
 
-    
+
 }
 
 exports.myDonations = async (req, res, next) => {
@@ -566,11 +583,21 @@ exports.myDonations = async (req, res, next) => {
     } else {
         endpointToken = "http://localhost:3000/api/v1/channels/myTokenStreamlabsRefresh"
     }
-    
+
     var responseToken = await axios.post(endpointToken);
     TokenStreamlabs = responseToken.data.newToken.access_token;
     TokenRefreshStreamlabs = responseToken.data.newToken.refresh_token;
-    
+
+    var tokenID = "60ee14da1d9eff4ba802cb02";
+    const tokenTemp = await TokenModel.findById(tokenID);
+
+    tokenTemp.overwrite({
+        token: TokenStreamlabs,
+        tokenRefresh: TokenRefreshStreamlabs
+    });
+
+    await tokenTemp.save();
+
     var data = {
         "access_token": TokenStreamlabs,
         "limit": 100
@@ -582,17 +609,17 @@ exports.myDonations = async (req, res, next) => {
         var response = await axios.get(endpoint);
         var donators = response.data.data;
         var accountant = [];
-        for(var i = 0; i < donators.length; i++){
-            if (!accountant.includes(donators[i].email)){
+        for (var i = 0; i < donators.length; i++) {
+            if (!accountant.includes(donators[i].email)) {
                 accountant.push(donators[i].email)
             }
         }
 
         var arrayDonators = Array(accountant.length);
-        for(var i = 0; i < donators.length; i++){
+        for (var i = 0; i < donators.length; i++) {
             var index = accountant.indexOf(donators[i].email);
-            if(-1 < index){
-                if(arrayDonators[index] == null){
+            if (-1 < index) {
+                if (arrayDonators[index] == null) {
                     arrayDonators[index] = [];
                 }
                 arrayDonators[index].push(donators[i])
