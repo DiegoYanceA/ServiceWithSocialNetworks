@@ -16,15 +16,15 @@ module.exports = (http) => {
   var enableEmoji = true;
   var arrayEmojis = [];
   var url = "";
+
+  var maxlenghtInput = 80;
+
   const mode = process.env.MODE || "DEVELOPMENT";
   if (mode == "PRODUCTION") {
     url = "https://asdiegoya.azurewebsites.net";
   } else {
     url = "http://localhost:3000"
   }
-
-
-
 
   io.on('connection', async (socket) => {
     var response = await axios.get(url + "/api/v1/emojis/getall")
@@ -41,8 +41,8 @@ module.exports = (http) => {
     //Cambiar de mensaje
     socket.on('messageRandom', async (message) => {
 
-      if (51 < message.length) {
-        message = message.substring(0, 51);
+      if (maxlenghtInput + 1 < message.length) {
+        message = message.substring(0, maxlenghtInput + 1);
       }
       socket.broadcast.emit('changeMessageRandom', message);
       messageAux = message;

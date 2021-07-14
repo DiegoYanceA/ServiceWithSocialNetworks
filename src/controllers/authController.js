@@ -79,7 +79,12 @@ exports.signin = async (req, res, next) => {
         return res.json({auth: false, msg: msg})
     } 
 
-    //2 Horas con el token
+    if(user.disabled){
+        msg = "El usuario ha sido dado de baja, comuniquese con asdiegoYA"
+        return res.json({auth: false, msg: msg})
+    }
+
+    //6 Horas con el token
     const token = jwt.sign({id: user._id}, secretKey,{
         expiresIn: 6 * 60 * 60
     })
