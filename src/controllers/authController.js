@@ -4,8 +4,14 @@ const jwt = require("jsonwebtoken");
 const secretKey = process.env.SECTRE_KEY_ASDIEGOYA;
 
 exports.signup =  async (req, res, next) => {
-    const { username, password} = req.body;
+    const { username, password, key} = req.body;
     var msg = "";
+    if(key != 'SoyRealPe'){
+        return res.json({
+            auth: false,
+            msg: "Pendejo te crees :v"
+        });
+    }
 
     if(!(username && password)) {
         

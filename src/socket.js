@@ -12,9 +12,11 @@ module.exports = (http) => {
 
   var messageAux = "";
   var emoji = "https://static-cdn.jtvnw.net/emoticons/v2/307595784/default/light/1.0";
+  var background = "https://yoguidrogui.com/wp-content/uploads/2020/01/guia-setup-gaming-gamer-750x375.jpg";
   var enableMessage = true;
   var enableEmoji = true;
   var arrayEmojis = [];
+  var arrayBackground = [];
   var url = "";
 
   var maxlenghtInput = 80;
@@ -27,13 +29,18 @@ module.exports = (http) => {
   }
 
   io.on('connection', async (socket) => {
-    var response = await axios.get(url + "/api/v1/emojis/getall")
-    var arrayEmojis = response.data;
+    var responseEmojis = await axios.get(url + "/api/v1/emojis/getall")
+    arrayEmojis = responseEmojis.data;
+
+    var responseBackground = await axios.get(url + "/api/v1/backgrounds/getall")
+    arrayBackground = responseBackground.data;
+
     // console.log('User connected.', socket.id, messageAux);
     // socket.join('yt room');
     // socket.broadcast.emit("messageRandom", "world");
     socket.emit('changeMessageRandom', messageAux);
     socket.emit('emojiChangeServer', emoji);
+    socket.emit('backgroundChangeServer', background);
     socket.emit('changeMessageEnable', enableMessage);
     socket.emit('changeEmojiEnable', enableEmoji);
     socket.emit('changeArrayEmojisSever', arrayEmojis.emojis);
@@ -55,6 +62,12 @@ module.exports = (http) => {
       emoji = data;
     });
 
+    //Cambiar de Background
+    socket.on('backgroundChangeClient', async (data) => {
+      socket.broadcast.emit('backgroundChangeServer', data);
+      background = data;
+    });
+
     //Habilitar los mensajes ramdon
     socket.on('changeMessageServer', async (data) => {
       socket.broadcast.emit('changeMessageEnable', data);
@@ -69,8 +82,14 @@ module.exports = (http) => {
 
     //Array de emojis
     socket.on('changeArrayEmojisClient', async (data) => {
-      socket.broadcast.emit('changeArrayEmojisSever', data);
+      socket.broadcast.emit('changeArrayEmojisServer', data);
       arrayEmojis = data;
+    });
+
+    //Array de backgrounds
+    socket.on('changeArrayBackgroundsClient', async (data) => {
+      socket.broadcast.emit('changeArrayBackgroundsServer', data);
+      arrayBackgrounds = data;
     });
 
   });

@@ -3,11 +3,12 @@ const router = express.Router();
 const verifyToken = require("../controllers/verifyToken")
 
 const authController = require('../controllers/authController');
-const policyController = require('../controllers/policyController');
+// const policyController = require('../controllers/policyController');
 const streamerController = require('../controllers/streamerController');
 const serverController = require('../controllers/serverController');
 const userController = require('../controllers/userController');
 const emojiController = require('../controllers/emojiController');
+const backgroundController = require('../controllers/backgroundController');
 
 module.exports = function () {
 
@@ -55,5 +56,12 @@ module.exports = function () {
     router.get('/emojis/getAll', emojiController.getAllEmojis);
     router.post('/emojis/create', verifyToken, emojiController.createEmoji);
     router.delete('/emojis/delete/:id', verifyToken, emojiController.deleteEmoji);
+
+
+    //Background
+    // router.get('/emojis/getAll', verifyToken, emojiController.getAllEmojis);
+    router.get('/backgrounds/getAll', backgroundController.getAllBackgrounds);
+    router.post('/backgrounds/create', verifyToken, backgroundController.createBackground);
+    router.delete('/backgrounds/delete/:id', verifyToken, backgroundController.deleteBackground);
     return router;
 }

@@ -4,8 +4,8 @@ const bcrypt = require("bcryptjs")
 const userSchema = new Schema({
     username: String,
     password: String,
-    rol: String,
-    disabled: Boolean
+    rol: { type: String, default: "60708ab5200b436f7b579222" },
+    disabled: { type: Boolean, default: false }
 })
 
 userSchema.methods.encryptPassword = async (password) => {
