@@ -89,10 +89,13 @@ exports.modYoutubeChannels = async (req, res) => {
 
     //Iteracion de canales
     for (var i = 0; i < moderators.length; i++) {
-        var url = getUrlYoutube(moderators[i].idChannel);
-        var channel = await findYoutubeChannel(url);
-        channel.urlChannel = "https://www.youtube.com/channel/" + moderators[i].idChannel;
-        channels.push(channel)
+        if(!moderators[i].disabled){
+            var url = getUrlYoutube(moderators[i].idChannel);
+            var channel = await findYoutubeChannel(url);
+            channel.urlChannel = "https://www.youtube.com/channel/" + moderators[i].idChannel;
+            channels.push(channel)
+        }
+        
     }
 
     return res.json({

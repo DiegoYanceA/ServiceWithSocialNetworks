@@ -2,7 +2,9 @@ const { Schema, model } = require("mongoose");
 
 const channelSchema = new Schema({
     idChannel: String,
-    rol: String
+    rol: String,
+    disabled: Boolean,
+    where: String
 })
 
 // userSchema.methods.encryptPassword = async (password) => {
