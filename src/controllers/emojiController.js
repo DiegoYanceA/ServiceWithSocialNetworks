@@ -16,7 +16,7 @@ var findRole = async (req, res) => {
     }
     const rol = await Rol.findById(user.rol);
     
-    if(rol.name != "ADMIN"){
+    if(rol[req.createApi]){
         msg = "No tiene acceso para realizar esta operación."
 
         return res.json({
@@ -27,7 +27,7 @@ var findRole = async (req, res) => {
 }
 
 exports.createEmoji =  async (req, res, next) => {
-    
+    req.createApi = "create";
     await findRole(req, res);
 
     const { image, type } = req.body;
@@ -76,7 +76,7 @@ exports.getAllEmojis =  async (req, res, next) => {
 
 
 exports.deleteEmoji =  async (req, res, next) => {
-    
+    req.createApi = "delete";
     await findRole(req, res);
     
     const { id } = req.params;
