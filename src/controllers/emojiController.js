@@ -16,7 +16,7 @@ var findRole = async (req, res) => {
     }
     const rol = await Rol.findById(user.rol);
     
-    if(rol[req.createApi]){
+    if(!rol[req.createApi]){
         msg = "No tiene acceso para realizar esta operación."
 
         return res.json({
