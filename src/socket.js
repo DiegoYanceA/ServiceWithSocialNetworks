@@ -58,14 +58,33 @@ module.exports = (http) => {
 
     //Cambiar de emoji
     socket.on('emojiChangeClient', async (data) => {
-      socket.broadcast.emit('emojiChangeServer', data);
-      emoji = data;
+      var responseEmojis = await axios.get(url + "/api/v1/emojis/getall")
+      arrayEmojisTemp = responseEmojis.data;
+      for(var i = 0; i < arrayEmojisTemp.emojis.length; i++){
+        if(arrayEmojisTemp.emojis[i].image.localeCompare(data) == 0){
+          socket.broadcast.emit('emojiChangeServer', data);
+          emoji = data;
+          return;
+        }
+      }
+      emoji = "https://images.clarin.com/2020/06/03/entre-la-escasa-imformacion-que___RqOFE13lq_720x0__1.jpg";
+      socket.broadcast.emit('emojiChangeServer', emoji);
+      
     });
 
     //Cambiar de Background
     socket.on('backgroundChangeClient', async (data) => {
-      socket.broadcast.emit('backgroundChangeServer', data);
-      background = data;
+      var responseBackground = await axios.get(url + "/api/v1/backgrounds/getall")
+      arrayBackgroundTemp = responseBackground.data;
+      for(var i = 0; i < arrayBackgroundTemp.backgrounds.length; i++){
+        if(arrayBackgroundTemp.backgrounds[i].image.localeCompare(data) == 0){
+          socket.broadcast.emit('backgroundChangeServer', data);
+          background = data;
+          return;
+        }
+      }
+      background = "https://images.clarin.com/2020/06/03/entre-la-escasa-imformacion-que___RqOFE13lq_720x0__1.jpg";
+      socket.broadcast.emit('backgroundChangeServer', background);
     });
 
     //Habilitar los mensajes ramdon

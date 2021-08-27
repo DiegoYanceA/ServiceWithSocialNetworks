@@ -54,6 +54,7 @@ module.exports = function () {
     //Emojis
     // router.get('/emojis/getAll', verifyToken, emojiController.getAllEmojis);
     router.get('/emojis/getAll', emojiController.getAllEmojis);
+    router.get('/emojis/test', emojiController.test);
     router.post('/emojis/create', verifyToken, emojiController.createEmoji);
     router.delete('/emojis/delete/:id', verifyToken, emojiController.deleteEmoji);
 

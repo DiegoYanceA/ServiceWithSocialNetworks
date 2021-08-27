@@ -96,3 +96,10 @@ exports.deleteEmoji =  async (req, res, next) => {
         msg: msg
     })
 };
+
+exports.test =  async (req, res, next) => {
+    var msg = "gaaa"
+    return res.json({
+        msg: "Gaaa"
+    })
+};
