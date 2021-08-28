@@ -9,13 +9,14 @@ const serverController = require('../controllers/serverController');
 const userController = require('../controllers/userController');
 const emojiController = require('../controllers/emojiController');
 const backgroundController = require('../controllers/backgroundController');
+const permissionController = require('../controllers/permissionController');
 
 module.exports = function () {
 
     router.post('/auth/signin', authController.signin);
     router.post('/auth/signup', authController.signup);
-    // router.post('/auth/signout', verifyToken, authController.signout);
-    router.get('/auth/existUser', verifyToken, authController.existUser);
+    // router.post('/auth/signout', verifyToken.verifyToken, authController.signout);
+    router.get('/auth/existUser', verifyToken.verifyToken, authController.existUser);
     // router.get('/privacy', policyController.policy);
 
     //Youtube
@@ -52,17 +53,21 @@ module.exports = function () {
     router.get('/users/getIp', userController.getIp);
 
     //Emojis
-    // router.get('/emojis/getAll', verifyToken, emojiController.getAllEmojis);
+    // router.get('/emojis/getAll', verifyToken.verifyToken, emojiController.getAllEmojis);
     router.get('/emojis/getAll', emojiController.getAllEmojis);
-    router.get('/emojis/test', emojiController.test);
-    router.post('/emojis/create', verifyToken, emojiController.createEmoji);
-    router.delete('/emojis/delete/:id', verifyToken, emojiController.deleteEmoji);
+    router.post('/emojis/create', verifyToken.verifyToken, emojiController.createEmoji);
+    router.delete('/emojis/delete/:id', verifyToken.verifyToken, emojiController.deleteEmoji);
 
 
     //Background
-    // router.get('/emojis/getAll', verifyToken, emojiController.getAllEmojis);
+    // router.get('/emojis/getAll', verifyToken.verifyToken, emojiController.getAllEmojis);
     router.get('/backgrounds/getAll', backgroundController.getAllBackgrounds);
-    router.post('/backgrounds/create', verifyToken, backgroundController.createBackground);
-    router.delete('/backgrounds/delete/:id', verifyToken, backgroundController.deleteBackground);
+    router.post('/backgrounds/create', verifyToken.verifyToken, backgroundController.createBackground);
+    router.delete('/backgrounds/delete/:id', verifyToken.verifyToken, backgroundController.deleteBackground);
+
+
+    //Permision
+    router.get('/permission/user', permissionController.getUserPermission);
+    router.post('/permission/userupdate',verifyToken.verifyToken, permissionController.updateUserPermission);
     return router;
 }

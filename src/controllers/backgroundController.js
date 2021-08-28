@@ -81,7 +81,7 @@ exports.deleteBackground =  async (req, res, next) => {
 
     await Background.deleteOne({ _id: id });
 
-    msg = "elimniado correctamente.";
+    msg = "eliminado correctamente.";
 
     return res.json({
         msg: msg

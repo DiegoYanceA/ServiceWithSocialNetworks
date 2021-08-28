@@ -67,8 +67,6 @@ module.exports = (http) => {
           return;
         }
       }
-      emoji = "https://images.clarin.com/2020/06/03/entre-la-escasa-imformacion-que___RqOFE13lq_720x0__1.jpg";
-      socket.broadcast.emit('emojiChangeServer', emoji);
       
     });
 
@@ -83,8 +81,6 @@ module.exports = (http) => {
           return;
         }
       }
-      background = "https://images.clarin.com/2020/06/03/entre-la-escasa-imformacion-que___RqOFE13lq_720x0__1.jpg";
-      socket.broadcast.emit('backgroundChangeServer', background);
     });
 
     //Habilitar los mensajes ramdon
