@@ -9,10 +9,10 @@ const TokenModel = require("../models/Token");
 //Token
 const myYoutubeChannel = "UCH5RD3yCZhuDf8V51rC1R7g";
 const myNameTwitch = "asdiegoYA";
-let TokenYoutube = "ya29.a0AfH6SMA8it5SQY-FXGBNA4KVl8rIgGEViYWG2LCUPUl6QyDiwa7_hrPR0FdotOD6Tec3SBJ0Hxjv2k1aepdQw2XQdlUGTPayK12KLtMb6zCc-41FRqZHE2WtAfuhTV0iRpWLHKp_ZFckot0XetS3L7nl8T01";
+let TokenYoutube = "ya29.a0ARrdaM9P8MgND3UMg9zB4raDvlb-nNVRx3V_kMznHxV7SyHZqM51GDrTsxZPR9IbuDlBfD_EL8sJpgbfwagpi_hU1kJr7wEXkT61Y7OrAkDHqYdhSAnJbIPeF0Zpdxa2WfZSGEWwu0TzXEIH1tSVYOoqSjSG";
 
 //Twitch
-const TokenTwitch = process.env.TOKEN_TWITCH || "7qfae98fn3gfgpfai156s2ppxvw1wh";
+const TokenTwitch = process.env.TOKEN_TWITCH || "4pmktx1x9hvkcb42l1f3rkn6e2ffyu";
 const ClientID_TWITCH = process.env.CLIENTID_TWITCH || "3375bfutpo46g5nqrlvqzeibzf8aar";
 const TwitchID = "565553685";
 
@@ -22,13 +22,12 @@ let TokenDiscord = "ODMwMjQ1NDgzMTg3NTM1ODg0.YHD4XA.65FYZsLTYs6afhbjKyuFQPdlQAw"
 //DISCORD
 let TokenStreamlabs = "";
 let TokenRefreshStreamlabs = ""
-
+var asdasd= 0;
 //API YOUTUBE
 //Encuentra un canal de Youtube con sus datos mediante su ID
 findYoutubeChannel = async (url) => {
 
     var response = await axios.get(url);
-
     var data = response.data.items[0];
     var channelName = data.snippet.title;
     var channelPhoto = data.snippet.thumbnails;
@@ -86,18 +85,19 @@ exports.modYoutubeChannels = async (req, res) => {
     var { _id } = await Rol.findOne({ name: "MOD" });
     var moderators = await Channel.find({ rol: _id });
     var channels = [];
-
+    
     //Iteracion de canales
     for (var i = 0; i < moderators.length; i++) {
         if(!moderators[i].disabled){
             var url = getUrlYoutube(moderators[i].idChannel);
+            
             var channel = await findYoutubeChannel(url);
             channel.urlChannel = "https://www.youtube.com/channel/" + moderators[i].idChannel;
             channels.push(channel)
         }
         
     }
-
+    
     return res.json({
         moderators: channels
     });
@@ -222,7 +222,7 @@ exports.myTokenYoutube = async (req, res, next) => {
         "client_id": '760735499293-4eqlvjaivd9m4l5b9kouk0u2h1bi7j4t.apps.googleusercontent.com',
         "client_secret": 'hvBT7bvRK8IPAWKAh0v4NeB3',
         "grant_type": 'authorization_code',
-        "code": '4/0AY0e-g7cYt84j8Ix7FRHJYwxxzocYjB7JMTXzpDJwlDqy_V5t12DGyL07JZ93L_Gmz3QUg',
+        "code": '4/0AX4XfWhdonJ_u7bZ1ZYtzJnQXlnj-Wv7o8oqZOiMLSIRtyAXtv8OKfMxGHvNZeT_Eg-ECQ',
         "redirect_uri": 'http://localhost:3000'
     }
 
@@ -250,7 +250,7 @@ exports.myTokenYoutubeRefresh = async (req, res, next) => {
         "client_id": '760735499293-4eqlvjaivd9m4l5b9kouk0u2h1bi7j4t.apps.googleusercontent.com',
         "client_secret": 'hvBT7bvRK8IPAWKAh0v4NeB3',
         "grant_type": 'refresh_token',
-        "refresh_token": '1//05s9VdqwghlJhCgYIARAAGAUSNwF-L9IrnU_6KnABwwm4y-F5sArY48-CzL-1dNI_QyoIiIwFT6z1XKBOD-uKGDJGSjJR4h19990'
+        "refresh_token": '1//05JIT4W1yWAloCgYIARAAGAUSNwF-L9Ir3VSaKTl1Kz_HZq-XTeUT9myIA0LAyuVN7ZKxkKz8yry5ANrh3Yv8IHwtJv1omRHKYgY'
     }
 
     var endpoint = "https://accounts.google.com/o/oauth2/token";
