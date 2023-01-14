@@ -8,21 +8,21 @@ const TokenModel = require("../models/Token");
 
 //Token
 const myYoutubeChannel = "UCH5RD3yCZhuDf8V51rC1R7g";
-const myNameTwitch = "asdiegoYA";
-let TokenYoutube = "ya29.a0ARrdaM9P8MgND3UMg9zB4raDvlb-nNVRx3V_kMznHxV7SyHZqM51GDrTsxZPR9IbuDlBfD_EL8sJpgbfwagpi_hU1kJr7wEXkT61Y7OrAkDHqYdhSAnJbIPeF0Zpdxa2WfZSGEWwu0TzXEIH1tSVYOoqSjSG";
+const myNameTwitch = "DiegoYance";
+let TokenYoutube = "TOKEN_YOUTUBE";
 
 //Twitch
-const TokenTwitch = process.env.TOKEN_TWITCH || "4pmktx1x9hvkcb42l1f3rkn6e2ffyu";
-const ClientID_TWITCH = process.env.CLIENTID_TWITCH || "3375bfutpo46g5nqrlvqzeibzf8aar";
+const TokenTwitch = process.env.TOKEN_TWITCH || "TOKEN_TWITCH";
+const ClientID_TWITCH = process.env.CLIENTID_TWITCH || "CLIENTE_ID_TWITCH";
 const TwitchID = "565553685";
 
 //DISCORD
-let TokenDiscord = "ODMwMjQ1NDgzMTg3NTM1ODg0.YHD4XA.65FYZsLTYs6afhbjKyuFQPdlQAw";
+let TokenDiscord = "TOKEN_DISCORD";
 
 //DISCORD
 let TokenStreamlabs = "";
 let TokenRefreshStreamlabs = ""
-var asdasd= 0;
+
 //API YOUTUBE
 //Encuentra un canal de Youtube con sus datos mediante su ID
 findYoutubeChannel = async (url) => {
@@ -169,7 +169,7 @@ exports.mySubscribersYT = async (req, res, next) => {
     var { max } = req.params;
     var endpointToken = "";
     if (mode == "PRODUCTION") {
-        endpointToken = "https://asdiegoya.azurewebsites.net/api/v1/channels/myTokenYoutubeRefresh"
+        endpointToken = "https://DiegoYance.azurewebsites.net/api/v1/channels/myTokenYoutubeRefresh"
     } else {
         endpointToken = "http://localhost:3000/api/v1/channels/myTokenYoutubeRefresh"
     }
@@ -210,7 +210,7 @@ exports.mySubscribersYT = async (req, res, next) => {
 /**
  * 
 https://accounts.google.com/o/oauth2/auth?
-  client_id=760735499293-4eqlvjaivd9m4l5b9kouk0u2h1bi7j4t.apps.googleusercontent.com&
+  client_id=CLIENT_ID&
   redirect_uri=http%3A%2F%2Flocalhost%3A3000&
   scope=https://www.googleapis.com/auth/youtube&
   response_type=code&
@@ -219,10 +219,10 @@ https://accounts.google.com/o/oauth2/auth?
 
 exports.myTokenYoutube = async (req, res, next) => {
     var data = {
-        "client_id": '760735499293-4eqlvjaivd9m4l5b9kouk0u2h1bi7j4t.apps.googleusercontent.com',
-        "client_secret": 'hvBT7bvRK8IPAWKAh0v4NeB3',
+        "client_id": 'client_id',
+        "client_secret": 'client_secret',
         "grant_type": 'authorization_code',
-        "code": '4/0AX4XfWhdonJ_u7bZ1ZYtzJnQXlnj-Wv7o8oqZOiMLSIRtyAXtv8OKfMxGHvNZeT_Eg-ECQ',
+        "code": 'code',
         "redirect_uri": 'http://localhost:3000'
     }
 
@@ -247,10 +247,10 @@ exports.myTokenYoutube = async (req, res, next) => {
 
 exports.myTokenYoutubeRefresh = async (req, res, next) => {
     var data = {
-        "client_id": '760735499293-4eqlvjaivd9m4l5b9kouk0u2h1bi7j4t.apps.googleusercontent.com',
-        "client_secret": 'hvBT7bvRK8IPAWKAh0v4NeB3',
+        "client_id": 'client_id',
+        "client_secret": 'client_secret',
         "grant_type": 'refresh_token',
-        "refresh_token": '1//05JIT4W1yWAloCgYIARAAGAUSNwF-L9Ir3VSaKTl1Kz_HZq-XTeUT9myIA0LAyuVN7ZKxkKz8yry5ANrh3Yv8IHwtJv1omRHKYgY'
+        "refresh_token": 'refresh_token'
     }
 
     var endpoint = "https://accounts.google.com/o/oauth2/token";
@@ -330,9 +330,20 @@ exports.myFollowTwitch = async (req, res, next) => {
             },
         });
     } catch (e) {
-        return res.json({
-            twitch: e
+        console.log(e);
+        var refresh = "https://id.twitch.tv/oauth2/token/"
+        var response = await axios.post(refresh, {
+            "client_id": ClientID_TWITCH,
+            "client_secret": "client_secret",
+            "grant_type": "refresh_token",
+            "refresh_token": a
+        }, {
+            headers: {
+                'Client-Id': ClientID_TWITCH,
+                'Authorization': 'Bearer ' + TokenTwitch,
+            },
         });
+        
     }
 
     var channelTwitch = [];
@@ -353,7 +364,7 @@ exports.myFollowTwitch = async (req, res, next) => {
 /** 
  https://discord.com/api/oauth2/authorize?
     response_type=code&
-    client_id=830245483187535884&
+    client_id=client_id&
     scope=identify%20guilds.join&
     state=15773059ghq9183habn&
     redirect_uri=http://localhost:3000&
@@ -393,8 +404,8 @@ exports.myTokenDiscord = async (req, res, next) => {
 
 exports.myTokenDiscordLogin = async (req, res, next) => {
     var data = {
-        email: 'asdiegoya@gmail.com',
-        password: 'asdasdsad'
+        email: 'mail',
+        password: 'test'
     }
 
     var endpoint = "https://discordapp.com/api/auth/login";
@@ -415,7 +426,7 @@ exports.myTokenDiscordLogin = async (req, res, next) => {
 }
 
 exports.myDiscordDetails = async (req, res, next) => {
-    var idDiscord = "747586757888835655";
+    var idDiscord = "idDiscord";
     var endpoint = "https://discord.com/api/v8/guilds/" + idDiscord + "?with_counts=true";
     // var endpoint ="https://discord.com/api/v8/users/@me/guilds";
     try {
@@ -439,7 +450,7 @@ exports.myDiscordDetails = async (req, res, next) => {
 }
 
 exports.myDiscord = async (req, res, next) => {
-    var idDiscord = "747586757888835655";
+    var idDiscord = "idDiscord";
     var endpoint = "https://discord.com/api/v8/guilds/" + idDiscord + "/preview";
     // var endpoint ="https://discord.com/api/v8/users/@me/guilds";
     try {
@@ -464,7 +475,7 @@ exports.myDiscord = async (req, res, next) => {
 
 /*
     https://www.streamlabs.com/api/v1.0/authorize?
-    client_id=RJrQkTE3IUfqLptkUV0kP0hEUDrLukHZ5cMMCSPS&
+    client_id=client_id&
     redirect_uri=http://localhost:3000&
     response_type=code&
     scope=donations.read+donations.create
@@ -475,13 +486,13 @@ exports.myTokenStreamlabs = async (req, res, next) => {
     var client_id = ""
     var client_secret = "";
     if (mode == "PRODUCTION") {
-        redirect_uri = "https://asdiegoya.azurewebsites.net";
-        client_id = "RGuWKlWFjq9kZDUHkpFucIEt81ZrEC4gvSl7LkHe";
-        client_secret = "oFXHtlRQbVRDnFOERvL2d2VYPPjfbg0gfPgPNtzv";
+        redirect_uri = "https://DiegoYance.azurewebsites.net";
+        client_id = "client_id";
+        client_secret = "client_secrect";
     } else {
         redirect_uri = "http://localhost:3000"
-        client_id = "RJrQkTE3IUfqLptkUV0kP0hEUDrLukHZ5cMMCSPS";
-        client_secret = "okLzRiNnECyIPzQfn37eXo1SB2zUtROCgzRfBJq3";
+        client_id = "client_id";
+        client_secret = "client_secret";
     }
 
     var data = {
@@ -530,13 +541,13 @@ exports.myTokenStreamlabs = async (req, res, next) => {
 exports.myTokenStreamlabsRefresh = async (req, res, next) => {
     var redirect_uri = "";
     if (mode == "PRODUCTION") {
-        redirect_uri = "https://asdiegoya.azurewebsites.net";
-        client_id = "RGuWKlWFjq9kZDUHkpFucIEt81ZrEC4gvSl7LkHe";
-        client_secret = "oFXHtlRQbVRDnFOERvL2d2VYPPjfbg0gfPgPNtzv";
+        redirect_uri = "https://DiegoYance.azurewebsites.net";
+        client_id = "client_id";
+        client_secret = "client_secret";
     } else {
         redirect_uri = "http://localhost:3000";
-        client_id = "RJrQkTE3IUfqLptkUV0kP0hEUDrLukHZ5cMMCSPS";
-        client_secret = "okLzRiNnECyIPzQfn37eXo1SB2zUtROCgzRfBJq3";
+        client_id = "client_id";
+        client_secret = "client_secret";
     }
 
     if (TokenRefreshStreamlabs == '') {
@@ -582,7 +593,7 @@ exports.myDonations = async (req, res, next) => {
 
     var endpointToken = "";
     if (mode == "PRODUCTION") {
-        endpointToken = "https://asdiegoya.azurewebsites.net/api/v1/channels/myTokenStreamlabsRefresh"
+        endpointToken = "https://DiegoYance.azurewebsites.net/api/v1/channels/myTokenStreamlabsRefresh"
     } else {
         endpointToken = "http://localhost:3000/api/v1/channels/myTokenStreamlabsRefresh"
     }

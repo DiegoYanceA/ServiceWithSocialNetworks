@@ -23,7 +23,7 @@ module.exports = (http) => {
 
   const mode = process.env.MODE || "DEVELOPMENT";
   if (mode == "PRODUCTION") {
-    url = "https://asdiegoya.azurewebsites.net";
+    url = "https://DiegoYance.azurewebsites.net";
   } else {
     url = "http://localhost:3000"
   }

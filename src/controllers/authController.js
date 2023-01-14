@@ -1,7 +1,7 @@
 const User = require("../models/User");
 const Rol = require("../models/Rol");
 const jwt = require("jsonwebtoken");
-const secretKey = process.env.SECTRE_KEY_ASDIEGOYA;
+const secretKey = process.env.SECTRE_KEY_DiegoYance;
 
 exports.signup =  async (req, res, next) => {
     const { username, password, key} = req.body;
@@ -86,7 +86,7 @@ exports.signin = async (req, res, next) => {
     } 
 
     if(user.disabled){
-        msg = "El usuario ha sido dado de baja, comuniquese con asdiegoYA"
+        msg = "El usuario ha sido dado de baja, comuniquese con DiegoYance"
         return res.json({auth: false, msg: msg})
     }
 

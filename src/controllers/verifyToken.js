@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const secretKey = process.env.SECTRE_KEY_ASDIEGOYA;
+const secretKey = process.env.SECTRE_KEY_DiegoYance;
 
 function verifyToken (req, res, next){
     const token = req.headers['x-access-token'];
